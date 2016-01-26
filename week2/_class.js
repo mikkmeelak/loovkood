@@ -15,7 +15,7 @@ var DOTS = [];
 var INDEX = 0;
 
 // this sets the spacing between dots
-var STEP = 6;
+var STEP = 9;
 
 // hello, this is for loop. it's going to be one of your best friends
 // in coding. it works like this
@@ -29,14 +29,14 @@ for (var x = STEP; x < WIDTH - STEP; x = x + STEP) {
 	// HEIGHT / 2 means that we'll draw it into
 	// the middle of the screen
 
-    // DOTS[INDEX] = new Path.Circle(x, HEIGHT / 2, 3);
-    // DOTS[INDEX].fillColor = 'red';
+    DOTS[INDEX] = new Path.Circle(x, HEIGHT / 2, 3);
+    DOTS[INDEX].fillColor = 'red';
 
 	// to see how an array DOTS works let's write INDEX number instead
-    DOTS[INDEX] = new PointText(x, HEIGHT / 2);
-    DOTS[INDEX].fillColor = 'black';
-    DOTS[INDEX].justification = 'center';
-    DOTS[INDEX].content = INDEX;
+    // DOTS[INDEX] = new PointText(x, HEIGHT / 2);
+    // DOTS[INDEX].fillColor = 'black';
+    // DOTS[INDEX].justification = 'center';
+    // DOTS[INDEX].content = INDEX;
 
 	// on every loop add one to INDEX
 	// it's shorthand for INDEX = INDEX + 1;
@@ -51,7 +51,7 @@ view.onFrame = function(event) {
 		// DOTS[] means get be a DOT from DOTS array from the position i
 		// remember that array's count starts from 0
 		// so DOTS[0] gets you the first dot from the array
-        DOTS[i].position.y = HEIGHT/2 + Math.sin(event.time/5 * i + 5) * 600.0;
+        DOTS[i].position.y = HEIGHT/2 + Math.sin(event.time/10 * i + 5) * 60;
     }
 };
 
