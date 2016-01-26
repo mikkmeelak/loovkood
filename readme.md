@@ -1,9 +1,9 @@
 # LOOVKOOD
 
-EKA Graafilise disaini osakonna loovkoodimise materjalid. Näited on ehitatud [Paper.js-iga](http://paperjs.org/). Näidete vaatamiseks kopeeri kood Paper.js-i [sketch-i](http://sketch.paperjs.org/).
+EKA Graafilise disaini osakonna loovkoodimise materjalid. Ehitatud [Paper.js-iga](http://paperjs.org/). Näidete vaatamiseks kopeeri kood [siia](http://sketch.paperjs.org/).
 
 ## Nädal 1
-Joonista oma viimane unenägu kasutades paperjs-i Pathi funktsioone.
+Joonista stseen kasutades vähemalt ühte liikuvad elementi.
 
 ## Nädal 2
-Tee screensaver. Kasuta vähemalt ühte for-loopi ning sin, cos või tan-i. Screensaver peab töötama fullscreenis erinevate suurustega ekraanidel.
+Screensaver. Kasuta vähemalt ühte for-loopi ning sin, cos või tan-i. Screensaver peab töötama fullscreenis erinevate suurustega ekraanidel.
