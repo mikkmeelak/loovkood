@@ -1,4 +1,5 @@
-//mikk@platvorm.ee
+//Linda Vainomäe
+// EKA BGD2 2016 loovkood
 console.log();
 
 //ristkylik (x, y, width, height);
