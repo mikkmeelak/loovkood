@@ -72,19 +72,20 @@ text.content = 'Good job!'
 
 var text = new PointText(new Point(300, 500));
 text.fillColor = 'white';
-    fontSize = ' 90 ';
+text.fontSize = 60;
 
 text.content = 'Well done!'
 
-var text = new PointText(new Point(300, 300));
+var text = new PointText(new Point(100, 300));
 text.fillColor = 'white';
-    fontSize = ' 90 ';
+text.fontSize = 20;
 text.content = 'You are a very valuable human being!'
 
-var text = new PointText(new Point(500, 200));
+var text = new PointText(new Point(400, 200));
 text.fillColor = 'white';
-    fontSize = ' 90 ';
+text.fontSize = 90;
 text.content = 'I love you!'
+//text.onFrame = function(event)
 
     
     

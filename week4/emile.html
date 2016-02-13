@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LOOVKOOD</title>
+	<style>
+		/* here you can change the background */
+		body { background-color: #366575; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+	</style>
+</head>
+
+<body>
+	<canvas id="canvas" resize></canvas>
+
+	<!--this is how you load your photos-->
+	<img id="divbell" src="http://ecx.images-amazon.com/images/I/81fvyZlrbAL._SL1300_.jpg" crossorigin="anonymous">
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+
+// VARIABLES________________________________________________________________________________
+
+		var original = new Raster("divbell");
+		var pixelated = new Raster('divbell');
+		var width = view.size.width;
+		var height = view.size.height;
+		var ratio = 0;
+		var size_circle = 50;
+		var ratio_circle = 2;
+		var crop_group;
+		var cylinder = 0;
+		var pos_mouse_x;
+		var pos_mouse_y;
+		var smooth_pos_mouse_x;
+		var smooth_pos_mouse_y;
+		var song = new Audio('http://s1.radio.ge/Music/Pink%20Floyd/1994_The_Division_Bell/10_Lost_for_Words.mp3')
+		var lines = [];
+		var index = 0;
+		var pix_size = Math.floor((Math.random() * 30) + 20);
+
+// FUNCTIONS______________________________________________________________________________
+
+		// Simplifie the image using a pixel-picking
+		function Pixelate(){
+			// Prepare a new layer
+			var pixelated_layer = new Layer();
+
+			for (var y = 0; y < (pixelated.height- 19); y = y + pix_size * ratio + 10) {
+				for (var x = 0; x < (pixelated.width - 19); x = x + pix_size * ratio + 10) {
+					pix_size = Math.floor((Math.random() * 30) + 20);
+
+					// Take the pixels color of the image
+					var pixel_chose = pixelated.getPixel(x, y);
+
+					// Recreate the pixels
+					var new_pixel = new Path.Rectangle({
+						point: [x * 0.5 * ratio, y * 0.5 * ratio],
+						size: pix_size / 2 * ratio
+					});
+					new_pixel.fillColor = pixel_chose;
+					new_pixel.position = new Point(x * 0.49 * ratio, y * 0.49 * ratio);
+				};
+			};
+		};
+
+		// Calculate the ratio of the window
+		function Ratio(){
+			var diff = width - height
+
+			if(diff > 0){
+				ratio = height * height / 462000
+			} else {
+				ratio = width * width / 462000
+			};
+		};
+
+		// Crop the image
+		function Crop(){
+
+			// Creates the crop shape
+			cylinder = new CompoundPath({
+				children: [
+					new Path.Circle({
+						center: new Point(0, 0),
+						radius: size_circle
+					}),
+					new Path.Circle({
+						center: new Point(0, 0),
+						radius: size_circle / ratio_circle
+					})
+				],
+				fillColor: "black"
+			});
+
+			cylinder.position = [smooth_pos_mouse_x, smooth_pos_mouse_y];
+
+			// Create a group containing the image with the path on top of it
+			crop_group = new Group([cylinder, croped]);
+			// Clip the image by the path:
+			crop_group.clipped = true;
+		};
+
+		// Animation of the background
+		function Back() {
+			for (var y = 0; y < original.height; y = y + 40) {
+				for (var x = 0; x < original.width; x = x + 40) {
+					lines[index] = original.getSubRaster(x, y, original.width, 50);
+					lines[index].position.x = x * 5;
+					lines[index].position.y = y * 5;
+					index++;
+				};
+			};
+		};
+
+
+// SCRIPT________________________________________________________________________________
+
+		Ratio();
+
+		// Move the raster to the center of the view
+		pixelated.visible = false;
+		original.visible = false;
+
+		// Scale the raster responsively
+		original.scale( 1.5 * ratio );
+		pixelated.scale( 0.5 * ratio );
+
+		// Shows the ratio of the screen
+		console.log("ratio : " + ratio);
+
+		Pixelate();
+
+		Back();
+
+		// Place the pixelated image in the center
+		project.activeLayer.position = view.center;
+
+		// Crop
+		var croped = new Raster('divbell');
+		croped.position = view.center;
+		croped.scale( 0.5 * ratio );
+		var crop_layer = new Layer();
+
+		// Curtain
+		var curtain = new Path.Rectangle({
+			size: 10000
+		});
+		curtain.fillColor = "black"
+
+		// Play button
+		var play = new Path.RegularPolygon({
+			radius: 20,
+			sides: 3
+		});
+		play.fillColor = "white"
+		play.position = view.center
+		play.rotation = 90
+
+		// Set the beginning of the song at 215.8 sec
+		song.currentTime = 215.8
+
+		// Mouse tracking
+		view.onMouseMove = function(event){
+			pos_mouse_x = event.point.x;
+			pos_mouse_y = event.point.y;
+			if (pos_mouse_x < width / 2) {
+				smooth_pos_mouse_x = pos_mouse_x + ((width / 2) - pos_mouse_x) / (1.4 * ratio)
+			} else {
+				smooth_pos_mouse_x = pos_mouse_x + ((width / 2) - pos_mouse_x) / (1.4 * ratio)
+			};
+			if (pos_mouse_y < width / 2) {
+				smooth_pos_mouse_y = pos_mouse_y + ((height / 2) - pos_mouse_y) / (1.4 * ratio)
+			} else {
+				smooth_pos_mouse_y = pos_mouse_y + ((height / 2) - pos_mouse_y) / (1.4 * ratio)
+			};
+		};
+
+
+		// Play event
+		play.onMouseDown = function(event) {
+			view.onFrame = function(event) {
+				play.visible = false;
+				curtain.visible = false;
+				console.log("running");
+				for (var i = 0; i < lines.length; i++) {
+					lines[i].pivot = [ -lines[i].width / 2, 0 ];
+					lines[i].rotation = Math.sin(event.time + i * 3) * 10;
+				}
+				size_circle = size_circle + 15 * ratio;
+				if(size_circle > 1200 * ratio) {;
+					size_circle = 0
+				};
+				Crop();
+			};
+			console.log("song starts");
+			song.play(3)
+		};
+	};
+
+</script>
+</html>

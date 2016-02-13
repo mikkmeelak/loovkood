@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LOOVKOOD</title>
+	<style>
+		/* here you can change the background */
+		body { background-color: blue; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+	</style>
+</head>
+
+<body>
+	<canvas id="canvas" resize></canvas>
+
+	<!--this is how you load your photos-->
+	<img id="image" src="http://cdn.promonews.tv/cdn/farfuture/O7EEbZVrzxGNPe-NIzQWUpCIveY5x5b4E2B3Z9-QO7M/mtime:1448833018/sites/default/files/styles/bmvd_content_page/public/Screen%20Shot%202015-11-29%20at%207.49.55%20PM.jpg?itok=ks7aM3MA" crossorigin="anonymous">
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+
+		// YOUR CODE STARTS HERE
+
+		// measure screen size and save it
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+		// make a new raster
+		var raster = new Raster('image');
+
+		// this hides
+		raster.visible = false;
+
+		// resize to limit the count of the pixels
+		raster.size = [ 240, 240 ];
+
+		var LINES = [];
+		var INDEX = 0;
+
+		// loop all rows and columns
+		for (var y = 0; y < raster.height; y = y + 40) {
+			for (var x = 0; x < raster.width; x = x + 60) {
+				LINES[INDEX] = raster.getSubRaster(x, y, raster.width, 100);
+
+				LINES[INDEX].position.x = x * 2;
+				LINES[INDEX].position.y = y * 2;
+				LINES[INDEX].rotation = x;
+
+				// LINES[INDEX].scale(y/100, 1);
+
+				LINES[INDEX].blendMode = 'overlay';
+				LINES[INDEX].opacity = 1.5;
+
+				INDEX++;
+
+				// for (var x = 0; x < raster.width; x++) {
+
+					// // let's get a pixel from the photo. this is a color object
+					// var pixel = raster.getPixel(x, y);
+
+					// var DOT = new Path.Circle({
+					// 	center: [ x * 12, y * 12 ],
+					// 	radius: 1
+					// });
+
+					// // var DOT = new Path.RegularPolygon({
+					// // 	center: [ x * 12, y * 12 ],
+					// // 	sides: 6,
+					// // 	radius: 6
+					// // });
+
+					// DOT.fillColor = pixel;
+
+					// // DOT.fillColor = new Color(0);
+					// // DOT.scale(pixel.blue * 2);
+
+					// // DOT.onMouseEnter = function(event) {
+					// // 	this.fillColor = pixel;
+					// // };
+
+					// // histogram?
+					// var DOT2 = new Path.Circle({
+					// 	// pixel.red is 0-1. multiply it with WIDTH
+					// 	center: [ pixel.red * WIDTH, pixel.blue * HEIGHT ],
+					// 	radius: 6
+					// });
+					// DOT2.fillColor = pixel;
+				// }
+			}
+		}
+
+		// takes everything and centers it
+		project.activeLayer.position = view.center;
+
+		// this function runs every frame
+		 view.onFrame = function(event) {
+		 	for (var i = 0; i < LINES.length; i++) {
+		 		LINES[i].pivot = [ -LINES[i].width / 8, 0 ];
+		 		LINES[i].rotation = Math.tan(event.time + i * 90) * 100;
+		 	}
+		 };
+	};
+</script>
+</html>
