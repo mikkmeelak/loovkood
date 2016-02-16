@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>LOOVKOOD</title>
+<style>
+/* Tuuli Velling
+EKA BGD2 2016 loovkood
+Mart Avi – Tuvalu */
+
+/* here you can change the background */
+
+body {  background-image: url("http://hddesktopwallpapers.in/wp-content/uploads/2015/09/rainforest-wallpaper-full-hd.jpg");
+    background-color: #3EA99F; 
+    background-size: 50% 50%; }
+canvas { position: fixed; top: -100; right: -600; left: -30 ; bottom: -600;}
+img { display: none; }
+</style>
+</head>
+
+<body>
+<canvas id="canvas" resize></canvas>
+   
+    <!-- pilti saab laadida siin -->
+<img id="image" src="https://i1.sndcdn.com/artworks-000130656706-hmvvb8-t500x500.jpg" crossorigin="anonymous">
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript">
+paper.install(window);
+
+window.onload = function() {
+paper.setup('canvas');
+view.viewSize = [ window.innerWidth, window.innerHeight ];
+window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+var tool = new Tool();
+
+
+// YOUR CODE STARTS HERE
+
+// measure screen size and save it
+var WIDTH = view.size.width;
+var HEIGHT = view.size.height;
+        
+        // teen rastri
+        var raster = new Raster('image');
+        raster.visible = false;
+        
+        // resize
+        raster.size = [ 25, 140 ];
+        
+        var LINES = [];
+        var INDEX = 0;
+        
+// loop all rows and columns
+for (var y = 0; y < raster.width * 10; y++) {
+            for (var x = -15; x < raster.width / 1.2; x++) {
+LINES[INDEX] = raster.getSubRaster(x, y, raster.width, 6);
+
+LINES[INDEX].position.y = y * 7;
+            LINES[INDEX].position.x = y * 15;
+LINES[INDEX].rotation = y * 70;
+
+LINES[INDEX].scale(y/5, 4);
+
+LINES[INDEX].blendMode = 'exclusion';
+LINES[INDEX].opacity = 0.3;
+LINES[INDEX].saturation = 0.7;
+
+INDEX++;    
+
+// this function runs every frame
+view.onFrame = function(event) {
+        for (var i = 7; i < LINES.length; i++) {
+               LINES[i].rotation = Math.tan(event.time + i * 2) * 9;
+            }
+};    
+
+
+
+// for (var x = 0; x < raster.width; x++) {
+
+// // let's get a pixel from the photo. this is a color object
+// var pixel = raster.getPixel(x, y);
+
+// var DOT = new Path.Circle({
+// center: [ x * 12, y * 12 ],
+// radius: 1
+// });
+
+// // var DOT = new Path.RegularPolygon({
+// // center: [ x * 12, y * 12 ],
+// // sides: 6,
+// // radius: 6
+// // });
+
+// DOT.fillColor = pixel;
+
+// // DOT.fillColor = new Color(0);
+// // DOT.scale(pixel.blue * 2);
+
+// // DOT.onMouseEnter = function(event) {
+// // this.fillColor = pixel;
+// // };
+                
+
+// // histogram?
+// var DOT2 = new Path.Circle({
+// // pixel.red is 0-1. multiply it with WIDTH
+// center: [ pixel.red * WIDTH, pixel.blue * HEIGHT ],
+// radius: 6
+// });
+// DOT2.fillColor = pixel;
+// }
+     }
+        }
+
+// takes everything and centers it
+project.activeLayer.position = view.center;
+
+// this function runs every frame
+//view.onFrame = function(event) {
+        //    for (var i = 0; i < LINES.length; i++) {
+        //        LINES[i].rotation = Math.sin(event.time + i * 3) * 10;
+        //    }
+//};
+};
+</script>
+</html>

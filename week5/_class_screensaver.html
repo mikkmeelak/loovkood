@@ -35,33 +35,43 @@
 		var WIDTH = view.size.width;
 		var HEIGHT = view.size.height;
 
-		// create a new box just for feedback that everything works
-		var BOX = new Path.Rectangle(WIDTH / 2 - 12, HEIGHT / 2 - 12, 24, 24);
-		BOX.fillColor = new Color(1, 0, 0.6);
+		var AXIS_X = 0;
+		var AXIS_Y = 0;
 
-		// this is run when mouse is clicked
-		tool.onMouseDown = function(event) {
+		// Liisi Lasn
+		// EKA BGD2 2016 loovkood
+		// screensaver Philippe Decrauzat'ile
 
-		};
+		// for loop
+		//
+		var DOTS = [];
+		var INDEX = 0;
+		var STEP = 20;
 
-		// this is run when mouse is dragged
-		tool.onMouseDrag = function(event) {
+		var LAINED = [];
+		var COUNT = 100;
 
-		};
+		for (var i = 0; i < COUNT; i++) {
+			LAINED[i] = new Path.Line({
+				from: [ 0, HEIGHT + 500 * HEIGHT],
+				to: [WIDTH, HEIGHT + 500 * HEIGHT],
+				strokeWidth: 2,
+			});
+			LAINED[i].strokeColor = new Color ('powderblue');
 
-		// this is run when mouse is released
-		tool.onMouseUp = function(event) {
+			LAINED[i].insert(1, WIDTH/3, HEIGHT /3);
+		}
 
-		};
-
-		// this is run when mouse is released
-		tool.onMouseMove = function(event) {
-
-		};
-
-		// this function runs every frame
 		view.onFrame = function(event) {
-			BOX.rotate(6);	// spin the box
+			for (var i = 0; i < LAINED.length; i++) {
+				LAINED[i].position.x += Math.cos(event.time) / (5) * i;
+				LAINED[i].strokeColor.hue = AXIS_X * 360;
+			}
+		};
+
+		view.onMouseMove = function(event) {
+			AXIS_X = event.point.x / WIDTH;
+			AXIS_Y = event.point.y / HEIGHT;
 		};
 	};
 </script>

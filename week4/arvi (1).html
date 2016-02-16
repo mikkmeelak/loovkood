@@ -4,7 +4,7 @@
 	<title>LOOVKOOD</title>
 	<style>
 		/* here you can change the background */
-		body { background-color: white; }
+		body { background-color: royalblue; }
 		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
 		img { display: none; }
 	</style>
@@ -14,7 +14,7 @@
 	<canvas id="canvas" resize></canvas>
 
 	<!--this is how you load your photos-->
-	<img id="image" src="http://ppcorn.com/us/wp-content/uploads/sites/14/2015/02/Drake-If-Youre-Reading-This-Its-Too-Late-Album-Review-FDRMX.jpg" crossorigin="anonymous">
+	<img id="image" src="http://media.creativebloq.futurecdn.net/sites/creativebloq.com/files/images/2014/02/coldplay1.jpg" crossorigin="anonymous">
 </body>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
@@ -41,24 +41,24 @@
 		raster.visible = false;
 
 		// resize to limit the count of the pixels
-		raster.size = [ 220, 220 ];
+		raster.size = [ 240, 435 ];
 
 		var LINES = [];
-		var INDEX = 0;
+		var INDEX = 2;
 
 		// loop all rows and columns
-		for (var y = 0; y < raster.height; y = y + 15) {
-			for (var x = 0; x < raster.width; x = x + 2) {
-				LINES[INDEX] = raster.getSubRaster(x, y, raster.width, 290);
+		for (var y = 0; y < raster.height; y = y + 99) {
+			for (var x = 0; x < raster.width; x = x + 341) {
+				LINES[INDEX] = raster.getSubRaster(x, y, raster.width,99);
 
-				LINES[INDEX].position.x = x * 20;
-				LINES[INDEX].position.y = y * 20;
-				LINES[INDEX].rotation = y;
+				LINES[INDEX].position.x = x * 1;
+				LINES[INDEX].position.y = y * .5;
+				LINES[INDEX].rotation = y * 45;
 
-			//LINES[INDEX].scale(y/100, 3);
+				// LINES[INDEX].scale(y/100, 1);
 
-				LINES[INDEX].blendMode = 'multiply';
-				LINES[INDEX].opacity = 1.5;
+				LINES[INDEX].blendMode = 'overlay';
+				LINES[INDEX].opacity = 0.9;
 
 				INDEX++;
 
@@ -102,11 +102,11 @@
 		project.activeLayer.position = view.center;
 
 		// this function runs every frame
-		view.onFrame = function(event) {
-			for (var i = 0; i < LINES.length; i++) {
-				LINES[i].pivot = [ -LINES[i].width / 5, 0 ];
-			    LINES[i].rotation = Math.sin(event.time + i * 3) * 100;
-			}
+		 view.onFrame = function(event) {
+		 	for (var i = 0; i < LINES.length; i++) {
+		 		LINES[i].pivot = [ -LINES[i].width / 2, 0 ];
+		 		LINES[i].rotation = Math.sin(event.time + i * 3) * 10;
+		 	}
 		 };
 	};
 </script>

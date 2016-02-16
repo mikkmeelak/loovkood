@@ -28,40 +28,56 @@
 		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
 		var tool = new Tool();
 
-
 		// YOUR CODE STARTS HERE
 
 		// measure screen size and save it
 		var WIDTH = view.size.width;
 		var HEIGHT = view.size.height;
 
+		var AXIS_X = 0;
+		var AXIS_Y = 0;
+
+		// create a box just for feedback that everything works
+		var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+		BACKGROUND.fillColor = new Color({
+			hue: 360,
+			saturation: 1,
+			brightness: 1
+		})
+
 		// create a new box just for feedback that everything works
-		var BOX = new Path.Rectangle(WIDTH / 2 - 12, HEIGHT / 2 - 12, 24, 24);
-		BOX.fillColor = new Color(1, 0, 0.6);
+		var BOX = new Path.Rectangle(WIDTH / 2 - 180, HEIGHT / 2 - 180, 360, 360);
+		BOX.fillColor = new Color({
+			hue: 360,
+			saturation: 1,
+			brightness: 1
+		});
 
-		// this is run when mouse is clicked
-		tool.onMouseDown = function(event) {
-
-		};
-
-		// this is run when mouse is dragged
-		tool.onMouseDrag = function(event) {
-
-		};
-
-		// this is run when mouse is released
-		tool.onMouseUp = function(event) {
-
-		};
-
-		// this is run when mouse is released
-		tool.onMouseMove = function(event) {
-
-		};
+		BOX.strokeColor = new Color(0);
+		BOX.strokeWidth = 6;
 
 		// this function runs every frame
 		view.onFrame = function(event) {
-			BOX.rotate(6);	// spin the box
+			//BOX.rotate(6);	// spin the box
+
+			// BOX.fillColor.hue = AXIS_X * 360;
+			// BACKGROUND.fillColor.hue = AXIS_X * 360;
+
+			// BOX.strokeWidth = AXIS_Y * 48;
+			BOX.dashArray = [AXIS_X * 10, AXIS_Y * 10];
+
+			for (var i = 0; i < BOX.segments.length; i++){
+				if ( i % 2 == 0 ) {
+					BOX.segments[i].point.x = AXIS_Y * WIDTH;
+				} else {
+					BOX.segments[i].point.x = AXIS_X * WIDTH;
+				}
+			}
+		};
+
+		view.onMouseMove = function(event) {
+			AXIS_X = event.point.x / WIDTH;
+			AXIS_Y = event.point.y / HEIGHT;
 		};
 	};
 </script>
