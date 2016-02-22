@@ -4,7 +4,7 @@
 	<title>LOOVKOOD</title>
 	<style>
 		/* here you can change the background */
-		body { background-color: lightgray; }
+		body { background-color: black; }
 		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
 		img { display: none; }
 	</style>
@@ -12,7 +12,9 @@
 
 <body>
 	<canvas id="canvas" resize></canvas>
-	<img id="image" src="http://assets.paperjs.org/images/marilyn.jpg" crossorigin="anonymous">
+
+	<!--this is how you load your photos-->
+	<img id="image" src="data:image/jpeg;base64,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" crossorigin="anonymous">
 </body>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
@@ -32,34 +34,80 @@
 		var WIDTH = view.size.width;
 		var HEIGHT = view.size.height;
 
-		// create a new box just for feedback that everything works
-		var BOX = new Path.Rectangle(WIDTH / 2 - 12, HEIGHT / 2 - 12, 24, 24);
-		BOX.fillColor = new Color(1, 0, 0.6);
+		// make a new raster
+		var raster = new Raster('image');
 
-		// this is run when mouse is clicked
-		tool.onMouseDown = function(event) {
+		// this hides
+		raster.visible = false;
 
-		};
+		// resize to limit the count of the pixels
+		raster.size = [ 300, 300 ];
 
-		// this is run when mouse is dragged
-		tool.onMouseDrag = function(event) {
+		var LINES = [];
+		var INDEX = 0;
 
-		};
+		// loop all rows and columns
+		for (var y = 0; y < raster.height; y = y + 9) {
+			for (var x = 0; x < raster.width; x = x + 9) {
+				LINES[INDEX] = raster.getSubRaster(x, y, raster.width, 1006);
 
-		// this is run when mouse is released
-		tool.onMouseUp = function(event) {
+				LINES[INDEX].position.x = x * 24;
+				LINES[INDEX].position.y = y * 3;
+				LINES[INDEX].rotation = y;
 
-		};
+				// LINES[INDEX].scale(y/100, 1);
 
-		// this is run when mouse is released
-		tool.onMouseMove = function(event) {
+				LINES[INDEX].blendMode = 'overlay';
+				LINES[INDEX].opacity = 0.5;
 
-		};
+				INDEX++;
+
+				// for (var x = 0; x < raster.width; x++) {
+
+					// // let's get a pixel from the photo. this is a color object
+					// var pixel = raster.getPixel(x, y);
+
+					// var DOT = new Path.Circle({
+					// 	center: [ x * 12, y * 12 ],
+					// 	radius: 1
+					// });
+
+					// // var DOT = new Path.RegularPolygon({
+					// // 	center: [ x * 12, y * 12 ],
+					// // 	sides: 6,
+					// // 	radius: 6
+					// // });
+
+					// DOT.fillColor = pixel;
+
+					// // DOT.fillColor = new Color(0);
+					// // DOT.scale(pixel.blue * 2);
+
+					// // DOT.onMouseEnter = function(event) {
+					// // 	this.fillColor = pixel;
+					// // };
+
+					// // histogram?
+					// var DOT2 = new Path.Circle({
+					// 	// pixel.red is 0-1. multiply it with WIDTH
+					// 	center: [ pixel.red * WIDTH, pixel.blue * HEIGHT ],
+					// 	radius: 6
+					// });
+					// DOT2.fillColor = pixel;
+				// }
+			}
+		}
+
+		// takes everything and centers it
+		project.activeLayer.position = view.center;
 
 		// this function runs every frame
-		view.onFrame = function(event) {
-			BOX.rotate(6);	// spin the box
-		};
+		// view.onFrame = function(event) {
+		// 	for (var i = 0; i < LINES.length; i++) {
+		// 		LINES[i].pivot = [ -LINES[i].width / 2, 0 ];
+		// 		LINES[i].rotation = Math.sin(event.time + i * 3) * 10;
+		// 	}
+		// };
 	};
 </script>
 </html>

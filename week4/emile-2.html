@@ -32,24 +32,15 @@
 		var ratio = 0;
 		var nose = [];
 		var face = [];
-		var ratio_face;
-		var face_size;
 		var eyeL = [];
 		var eyeR = [];
 		var eyes = [];
-		var left_eyebrow = [];
-		var right_eyebrow = [];
-		var all_eyes = new Group();
 		var mouth = [];
-		var mouth_color = [Math.random(), Math.random(), Math.random()];
 		var eyebrowsL = [[]];
 		var eyebrowsR = [[]];
-		var eyebrows = [];
 		var points_nose = [];
-		var smooth_pos_mouse_x = 0;
-		var smooth_pos_mouse_x_mouth = 0;
-		var smooth_pos_mouse_y = 0;
-		var smooth_pos_mouse_y_mouth = 0;
+		var smooth_pos_mouse_x;
+		var smooth_pos_mouse_y;
 		var pos_mouse_x;
 		var pos_mouse_y;
 		var nb_chara_loop = 0;
@@ -74,8 +65,9 @@
 
 		function Character(nb_chara) {
 			// Face ##################################
-			face_size = (parseInt(Math.random() * 50) + 100) * ratio
+			var face_size = (parseInt(Math.random() * 50) + 100) * ratio
 			var chose = parseInt(Math.random() * 3)
+			console.log(face_size)
 
 			if (chose == 0) {
 				face[nb_chara] = new Path.Circle({
@@ -91,33 +83,32 @@
 					size: face_size + 40
 				});
 			}
-			face[nb_chara].position.x = view.center.x;
-			face[nb_chara].position.y = view.center.y;
+			face[nb_chara].position = view.center;
 			face[nb_chara].fillColor = [Math.random(), Math.random(), Math.random()];
 
 			// Mouth ##################################
-			ratio_face = face_size / 168.5
-			var start_point = new Point((width / 2 - 20), (height / 2 + 55))
-			var end_point = new Point((width / 2 + 20), (height / 2 + 55))
-			var through_point = new Point(width / 2, height / 2 + 50)
-			var handleIn =  new Point(-20, 0)
-			var handleOut = new Point(20, 0)
-			var through = new Segment(through_point, handleIn, handleOut)
-			var start = new Segment(start_point, null, null)
-			var end = new Segment(end_point, null, null)
+			var mouth_color = [Math.random(), Math.random(), Math.random()];
+			var mouth_arcY = - 20
+			mouth[nb_chara] = new Path.Arc({
+				from: [(width / 2 - 20) * ratio, (height / 2 + 70) * ratio],
+				through: [(width / 2 - 20) * ratio, (height / 2 + 70 + mouth_arcY) * ratio],
+				to: [(width / 2 + 20) * ratio, (height / 2 + 70) * ratio],
+				fillColor: mouth_color
+			});
 
-			mouth[nb_chara] = new Path(start, through, end)
-			mouth[nb_chara].closed = true
-			mouth[nb_chara].fillColor = mouth_color
+			var ratio_face = face_size / 168.5
+			mouth[nb_chara].scale(1 * ratio_face , 1 * ratio_face)
 
 			// Nose ##################################
 			nose[nb_chara] = new Path();
 			for (var nb_nose = 0; nb_nose < 3; nb_nose++) {
-				points_nose[nb_nose] = new Point(RandPoint(5) + width / 2, RandPoint(20) + height / 2);
+				points_nose[nb_nose] = new Point(RandPoint(10) + width / 2, RandPoint(50) + height / 2);
+				console.log(points_nose[nb_nose]);
 				nose[nb_chara].add(points_nose[nb_nose]);
 			}
 			nose[nb_chara].strokeColor = [Math.random(), Math.random(), Math.random()];
-			nose[nb_chara].strokeWidth = (Math.random() * 8 + 5) * ratio;
+			nose[nb_chara].strokeWidth = (Math.random() * 6 + 2) * ratio;
+			//nose.selected = true;
 
 			// Eyes ##################################
 			var eye_size = (parseInt(Math.random() * 10) + 5);
@@ -136,13 +127,10 @@
 			eyeL[nb_chara].position.x = view.center.x - 20 * ratio;
 			eyeL[nb_chara].position.y = view.center.y - 20 * ratio;
 			eyes[nb_chara] = new Group([eyeR[nb_chara], eyeL[nb_chara]])
-			all_eyes.addChild(eyes[nb_chara]);
-			all_eyes.bringToFront()
+			console.log(eyes[nb_chara])
 
 			// Eyebrows ##################################
-			right_eyebrow[nb_chara] = new Group();
-			left_eyebrow[nb_chara] = new Group();
-			var hairPosY_from = (eyeR[nb_chara].position.y + Math.random() * 5 - 25);
+			var hairPosY_from = (eyeR[nb_chara].position.y + Math.random() * 5 - 20);
 			var hairPosY_to = (hairPosY_from + Math.random() * 5);
 			var hairPosX_from = (eyeR[nb_chara].position.x - 15 + Math.random() * 20);
 			var hairPosX_to = (eyeR[nb_chara].position.x - 15 + Math.random() * 60);
@@ -163,8 +151,6 @@
 				eyebrowsR[nb_hair].strokeWidth = eyebrows_width
 				eyebrowsL[nb_hair].strokeColor = eyebrows_color;
 				eyebrowsL[nb_hair].strokeWidth = eyebrows_width
-				right_eyebrow[nb_chara].addChild(eyebrowsR[nb_hair]);
-				left_eyebrow[nb_chara].addChild(eyebrowsL[nb_hair]);
 
 				// reset of the values
 				hairPosY = (eyeR[nb_chara].position.y + Math.random() * 5 - 20);
@@ -178,59 +164,33 @@
 // SCRIPT___________________________________________________________________________________
 
 		Ratio();
-
-		var back = new Path.Rectangle({
-			width: width,
-			height: height,
-			center: view.center,
-			fillColor: "grey"
-		})
-
-		for (nb_chara_loop; nb_chara_loop < 1;) {
+		for (nb_chara_loop; nb_chara_loop < 2;) {
 			Character(nb_chara_loop);
-			mouth_color = [Math.random(), Math.random(), Math.random()];
-			eyes[nb_chara_loop].position.x += (nb_chara_loop * 280 * ratio)
-			face[nb_chara_loop].position.x += (nb_chara_loop * 280 * ratio)
-			mouth[nb_chara_loop].position.x += (nb_chara_loop * 280 * ratio)
-			nose[nb_chara_loop].position.x += (nb_chara_loop * 280 * ratio)
-			left_eyebrow[nb_chara_loop].position.x += (nb_chara_loop * 280 * ratio)
-			right_eyebrow[nb_chara_loop].position.x += (nb_chara_loop * 280 * ratio)
+			project.activeLayer.position.x = project.activeLayer.position.x + 280 * ratio
 			nb_chara_loop = nb_chara_loop + 1
 		}
-		project.activeLayer.position.x = view.center.x
+
 
 		view.onMouseMove = function(event){
 			pos_mouse_x = event.point.x;
 			pos_mouse_y = event.point.y;
 			if (pos_mouse_x < width / 2) {
-				smooth_pos_mouse_x = pos_mouse_x + ((width / 2) - pos_mouse_x) / (1 * ratio)
-				smooth_pos_mouse_x_mouth = pos_mouse_x + ((width / 2) - pos_mouse_x) / (1.02 * ratio)
+				smooth_pos_mouse_x = pos_mouse_x + ((width / 2) - pos_mouse_x) / (1.01 * ratio)
 			} else {
-				smooth_pos_mouse_x = pos_mouse_x + ((width / 2) - pos_mouse_x) / (1 * ratio)
-				smooth_pos_mouse_x_mouth = pos_mouse_x + ((width / 2) - pos_mouse_x) / (1.02 * ratio)
+				smooth_pos_mouse_x = pos_mouse_x + ((width / 2) - pos_mouse_x) / (1.01 * ratio)
 			};
 			if (pos_mouse_y < width / 2) {
-				smooth_pos_mouse_y = pos_mouse_y + ((height / 2) - pos_mouse_y) / (1 * ratio)
-				smooth_pos_mouse_y_mouth = pos_mouse_y + ((height / 2) - pos_mouse_y) / (1.1 * ratio)
+				smooth_pos_mouse_y = pos_mouse_y + ((height / 2) - pos_mouse_y) / (1.01 * ratio)
 			} else {
-				smooth_pos_mouse_y = pos_mouse_y + ((height / 2) - pos_mouse_y) / (1 * ratio)
-				smooth_pos_mouse_y_mouth = pos_mouse_y + ((height / 2) - pos_mouse_y) / (1.1 * ratio)
+				smooth_pos_mouse_y = pos_mouse_y + ((height / 2) - pos_mouse_y) / (1.01 * ratio)
 			};
 		};
 
 		view.onFrame = function(event) {
-			for (var x = 0; x < nb_chara_loop; x++){
-				if (pos_mouse_y > 0 || pos_mouse_x > 0) {
-					all_eyes.position.x = smooth_pos_mouse_x
-					all_eyes.position.y = smooth_pos_mouse_y - 20
-					mouth[x].segments[1].point.y = smooth_pos_mouse_y_mouth + 55
-					left_eyebrow[x].rotation = 30 * (0.5 - pos_mouse_x / width)
-					right_eyebrow[x].rotation = -(40 * (0.5 - pos_mouse_x / width))
-					back.fillColor = [ 1 - (pos_mouse_y / height), pos_mouse_x / width , 0]
-				}
-			}
+			for (var x = 0; x < nb_chara_loop; x++)
+			eyes[x].position = [(smooth_pos_mouse_x - (x * 280) * ratio), smooth_pos_mouse_y];
 		}
-
+		project.activeLayer.position = view.center
 
 
 
