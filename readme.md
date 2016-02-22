@@ -5,7 +5,7 @@ EKA Graafilise disaini osakonna loovkoodimise materjalid. Ehitatud kasutades [Pa
 ## Sketsid
 
 | nimi		| 1		| ok	| 3		| 4		|
-| --- 		|: --- :|: --- :|: --- :|: --- :|
+| :--- 		| :---: | :---: | :---: | :---: |
 | Anita	 	| ok	| ok	| ok	| ok	|
 | Arvi	 	| nop	| ok	| ok	| ok	|
 | Hayley	| nop	| ok	| ok	| nop	|
