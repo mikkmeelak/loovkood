@@ -4,19 +4,19 @@ EKA Graafilise disaini osakonna loovkoodimise materjalid. Ehitatud kasutades [Pa
 
 ## Sketsid
 
-|nimi|1|ok|3|4|final|
-|-|:-:|:-:|:-:|:-:|:-:|
-|Anita|ok|ok|ok|ok|
-|Arvi|nop|ok|ok|ok|
-|Hayley|nop|ok|ok|nop|
-|Johann|nop|ok|silmad õigesti?|ok|
-|Jorven|ok|nop|ok|ok|
-|Kristjan|nop|nop|nop|nop|
-|Liisi|ok|ok|ok|nop|
-|Linda|ok|ok|ok|nop|
-|Martis|ok|ok|ok|ok|
-|Meeri|ok|ok|ok|ok|
-|Oskar|ok|ok|ok|nop|
-|Terezie|nop|ok|ok|ok|
-|Tuuli|ok|ok|ok|ok|
-|Ulla|ok|ok|nop|nop|
+| nimi		| 1		| ok	| 3		| 4		| final	|
+| --- 		|: --- :|: --- :|: --- :|: --- :|: --- :|
+| Anita	 	| ok	| ok	| ok	| ok	|
+| Arvi	 	| nop	| ok	| ok	| ok	|
+| Hayley	| nop	| ok	| ok	| nop	|
+| Johann	| nop	| ok	| silmad on õigesti? | ok	|
+| Jorven	| ok	| nop	| ok	| ok	|
+| Kristjan	| nop	| nop	| nop	| nop	|
+| Liisi	 	| ok	| ok	| ok	| nop	|
+| Linda	 	| ok	| ok	| ok	| nop	|
+| Martis	| ok	| ok	| ok	| ok	|
+| Meeri	 	| ok	| ok	| ok	| ok	|
+| Oskar	 	| ok	| ok	| ok	| nop	|
+| Terezie	| nop	| ok	| ok	| ok	|
+| Tuuli	 	| ok	| ok	| ok	| ok	|
+| Ulla	 	| ok	| ok	| nop	| nop	|
