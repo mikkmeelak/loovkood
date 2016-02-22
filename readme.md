@@ -6,7 +6,7 @@ EKA Graafilise disaini osakonna loovkoodimise materjalid. Ehitatud kasutades [Pa
 
 |nimi|1|ok|3|4|final|
 |-|:-:|:-:|:-:|:-:|:-:|
-|Anita|ok|nop|ok|ok|
+|Anita|ok|ok|ok|ok|
 |Arvi|nop|ok|ok|ok|
 |Hayley|nop|ok|ok|nop|
 |Johann|nop|ok|silmad õigesti?|ok|
