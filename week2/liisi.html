@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>LOOVKOOD</title>
+	<style>
+		body { background-color: lightgray; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0;
+        color: white; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Liisi Lasn</p>
+		<p class="desc">Screensaver Philippe Decrauzat'ile</p>
+	</div>
+
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+		// Liisi Lasn
+		// EKA BGD2 2016 loovkood
+		// screensaver Philippe Decrauzat'ile
+
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+		console.log(WIDTH + ' ja ' + HEIGHT);
+
+		var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+			BACKGROUND.fillColor = new Color(0);
+
+		// for loop
+		//
+		var DOTS = [];
+		var INDEX = 0;
+		var STEP = 20;
+
+		var LAINED = [];
+		var COUNT = 300;
+
+		for (var i = 0; i < COUNT; i++) {
+			LAINED[i] = new Path.Line({
+				from: [ 0, HEIGHT + 500 * HEIGHT],
+				to: [WIDTH, HEIGHT + 500 * HEIGHT],
+				strokeWidth: 2,
+			});
+			LAINED[i].strokeColor = new Color ('powderblue');
+
+			LAINED[i].insert(1, WIDTH/3, HEIGHT /3);
+		}
+
+		view.onFrame = function(event) {
+			for (var i = 0; i < LAINED.length; i++) {
+				LAINED[i].position.x += Math.cos(event.time) /2 * i;
+			}
+		}
+
+
+	};
+</script>
+</html>

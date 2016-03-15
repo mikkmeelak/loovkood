@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>prank2016gonewrongfunnycompilation</title>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+	<script type="text/javascript" src='http://js.leapmotion.com/leap-0.6.4.js'></script>
+
+	<style>
+
+		/* here you can change the background */
+		body { background-color: ghostWhite; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		button {
+background: #aebcbf;
+background: -moz-linear-gradient(top,  #aebcbf 0%, #6e7774 50%, #0a0e0a 51%, #494949 100%);
+background: -webkit-linear-gradient(top,  #aebcbf 0%,#6e7774 50%,#0a0e0a 51%,#494949 100%);
+background: linear-gradient(to bottom,  #aebcbf 0%,#6e7774 50%,#0a0e0a 51%,#494949 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#aebcbf', endColorstr='#494949',GradientType=0 );
+
+			color: white;
+			border: 1;
+			display: block;
+			padding: 10px 20px;
+			border-radius: 20px ;
+			box-shadow: 0px 13px 31px -1px rgba(0,0,0,0.75);
+			font-family: "Verdana";
+			font-size: 11pt;
+			position: fixed;
+			top: 1vw;
+		}
+
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 90vw;
+			font-family: "Verdana";
+			font-size: 8pt;
+			z-index: 1000;
+		}
+		.desc {
+			font-size: 6pt;
+			font-style: italic;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Jakob Tulve</p>
+		<p class="desc">The best prank of #2016</p>
+	</div>
+
+
+	<button>CL1CK ANYWH3R3 T0 THR0W N1NJA 5TAR</button>
+	<canvas id="myCanvas" resize hidpi="off"></canvas>
+
+</body>
+<script type="text/paperscript" canvas="myCanvas">
+	paper.install(window)
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) {
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+	}
+
+
+	var WIDTH = view.size.width;
+	var HEIGHT = view.size.height;
+
+	var AXIS_X = 0;
+	var AXIS_Y = 0;
+
+
+
+
+
+var mousePoint = view.center;
+var amount = 10;
+var colors = ['black', 'black', 'black', 'black'];
+
+
+
+for (var i = 0; i < amount; i++) {
+
+// Teen pathi
+    var pathData = 'M495.402,322.967c-13.949-8.055-18.733-25.898-10.678-39.86c7.195-12.465,22.186-17.58,35.252-12.801\
+	l62.057-65.481l-88.282,21.131c-1.534,8.043-6.402,15.404-14.053,19.82c-13.949,8.053-31.795,3.275-39.858-10.684\
+	c-7.197-12.463-4.129-28.003,6.541-36.931L420.7,111.679l-25.843,87.019c6.2,5.35,10.14,13.249,10.14,22.079\
+	c0,16.115-13.066,29.179-29.181,29.179c-14.391,0-26.318-10.426-28.713-24.13l-87.736-21.002l62.442,65.89\
+	c7.73-2.691,16.54-2.156,24.188,2.26c13.953,8.058,18.737,25.904,10.678,39.86c-7.197,12.463-22.188,17.579-35.254,12.801\
+	l-62.055,65.481l88.282-21.132c1.534-8.041,6.404-15.401,14.053-19.819c13.953-8.054,31.799-3.272,39.857,10.684\
+	c7.198,12.466,4.132,28.006-6.538,36.933l25.679,86.479l25.842-87.017c-6.199-5.352-10.139-13.246-10.139-22.082\
+	c0-16.108,13.062-29.174,29.181-29.178c14.393,0.002,26.32,10.426,28.716,24.131l87.733,21.001l-62.44-65.889\
+	C511.86,327.92,503.052,327.383,495.402,322.967z M420.698,317.603c-10.843,0-19.634-8.79-19.634-19.636\
+	c0-10.843,8.791-19.633,19.634-19.633c10.845,0,19.635,8.79,19.635,19.633C440.333,308.812,431.543,317.603,420.698,317.603z';
+    var tribal = new Path(pathData)
+    tribal.fillColor = colors[i % 4];
+    tribal.blendMode= 'multiply';
+	var path = new Path.Rectangle(tribal);
+	path.fillColor = colors[i % 4];
+
+
+
+}
+var test = new Point(0,0);
+
+
+
+var children = project.activeLayer.children;
+
+for (var i = 0, l = children.length; i < l; i++) {
+		var item = children[i];
+		item.rotate(i * -1);
+		item.opacity = 1 - (i * 0.05);
+
+	}
+
+function onFrame(event) {
+
+
+
+
+	for (var i = 0, l = children.length; i < l; i++) {
+		var item = children[i];
+		var delta = (test - item.position) / (i + 1);
+		item.rotate(event.delta * 100);
+		if (delta.length > 0.1)
+
+			// if(mouseEvent.delta)
+		        // item.rotation = mouseEvent.delta.angle + 180;
+			item.position += delta;
+			item.applyMatrix = false;
+	}
+
+	
+
+}
+
+function onMouseMove(event) {
+    mouseEvent = event
+	// mousePoint = event.point;
+	test = event.point;
+
+
+}
+
+function onMouseDown(event) {
+	alert('NOT THROWING')
+	alert('SORRY')
+	alert('U JUST GOT PRANKED SON')
+	alert('U R NOT A NINJA')
+	alert('STOP PRETENDING')
+}
+
+// sellega saab leap motioni toe
+		Leap.loop( { background: true }, leapAnimate).connect();
+		function leapAnimate(frame) {
+			if (frame.hands.length > 0 && frame.hands[0].palmNormal) {
+				AXIS_X = (frame.hands[0].palmNormal[0] + 1) / 2;
+				AXIS_Y = (frame.hands[0].palmNormal[2] + 1) / 2;
+
+				// console.log(AXIS_X, AXIS_Y);
+			}
+		}
+</script>
+</html>

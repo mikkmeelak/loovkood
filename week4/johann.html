@@ -4,17 +4,36 @@
 	<title>LOOVKOOD</title>
 	<style>
 		/* here you can change the background */
-		body { background-color: mediumspringgreen; }
+		body { background-color: red; }
 		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
 		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
 	</style>
 </head>
 
 <body>
+	<div class="caption">
+		<p class="author">johann kabonen</p>
+		<p class="desc">visuaal Itaalia new wave ansambli Neon loole My Blues Is You (aastast 1983)</p>
+	</div>
+
+	
 	<canvas id="canvas" resize></canvas>
 
 	<!--this is how you load your photos-->
-	<img id="image" src="https://www.muurileht.ee/media/DJ-ankeet_Johann_3000_Foto_AleksanderKelpman-1200x800-e1455040377430.jpg" crossorigin="anonymous">
+	<img id="image" src="http://assets.paperjs.org/images/marilyn.jpg" crossorigin="anonymous">
 </body>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
@@ -41,24 +60,24 @@
 		raster.visible = false;
 
 		// resize to limit the count of the pixels
-		// raster.size = [ 240, 240 ];
+		// raster.size = [ 40, 40 ];
 
 		var LINES = [];
-		var INDEX = 0;
+		var INDEX = 1;
 
 
 		// loop all rows and columns
-		for (var y = 0; y < raster.height; y = y + 3) {
-			LINES[INDEX] = raster.getSubRaster(0, y, raster.width, 6);
+		for (var y = 12; y < raster.height; y = y + 4) {
+			LINES[INDEX] = raster.getSubRaster(10, y, raster.width, 120);
 
 
 			LINES[INDEX].position.x = y;
-			LINES[INDEX].rotation = y/12;
+			LINES[INDEX].rotation = y/34;
 
-			LINES[INDEX].scale(y/10, 2);
+			LINES[INDEX].scale(y/120, 22);
 
-			LINES[INDEX].blendMode = 'multiply';
-			LINES[INDEX].opacity = 0.9;
+			LINES[INDEX].blendMode = 'overlay';
+			LINES[INDEX].opacity = 0.98;
 
 			INDEX++;
 
@@ -102,11 +121,12 @@
 
 		// this function runs every frame
 		view.onFrame = function(event) {
-			for (var i = 0; i < LINES.length; i++) {
-				LINES[i].pivot = [ -LINES[i].width / 2, 0 ];
-				LINES[i].rotation = Math.sin(event.time + i * 3) * 10;
+			for (var i = 2; i < LINES.length; i++) {
+				LINES[i].pivot = [ -LINES[i].width / 400, 20 ];
+				LINES[i].rotation = Math.cos(event.time - i / 10) * 123;
 			}
 		};
 	};
 </script>
 </html>
+

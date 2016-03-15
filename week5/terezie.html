@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>LOOVKOOD</title>
+	<style>
+		/* here you can change the background */
+		body { background-color: lightgoldenrodyellow; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Terezie Stindlova</p>
+		<p class="desc">"Petr Muk–czech pop musician"</p>
+	</div>
+
+
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+
+	<img id="image" src="http://www.pitterpatter.com.my/wp-content/uploads/2014/11/crying-baby-1.jpg">
+
+    <img id="image2" src="https://s-media-cache-ak0.pinimg.com/236x/65/7d/88/657d88ba57177f20d705fd83b33ad0b5.jpg">
+
+    <div class="box"></div>
+
+ <audio id="song" src="https://dl.dropboxusercontent.com/u/56086196/Petr-Muk---Tan%C4%8D%C3%AD%C5%A1-Sama.mp3" autoplay>
+</audio>
+
+<audio id="song2" src="https://dl.dropboxusercontent.com/u/56086196/tanecky1.wav" autoplay>
+</audio>
+
+
+</body>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript" src='http://js.leapmotion.com/leap-0.6.4.js'></script>
+<script type="text/javascript">
+
+
+	paper.install(window);
+
+	window.onload = function () {
+		paper.setup('canvas');
+		view.viewSize = [window.innerWidth, window.innerHeight];
+
+		window.onresize = function (event) {
+			view.viewSize = [ window.innerWidth, window.innerHeight ];
+		};
+
+		var tool = new Tool();
+
+		// YOUR CODE STARTS HERE
+		// measure screen size and save it
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+		var AXIS_X = 0;
+		var AXIS_Y = 80;
+
+		// create a new box just for feedback that everything works
+		var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+		BACKGROUND.fillColor = new Color({
+			hue: 380,
+			saturation: 1,
+			brightness: 1
+		});
+
+
+
+        var song = document.getElementById('song');
+
+		song.loop = true;
+
+     //   song.playbackRate = 0.5;
+
+		//var song1 = document.getElementById('song1');
+		//song1.loop = true;
+
+		var song2 = document.getElementById('song2');
+		song2.loop = true;
+
+		var face = new Group();
+
+		var head = new Path.Circle(WIDTH / 4 - 15, HEIGHT / 2 - 20, 200, 200);
+		head.fillColor = 'yellow';
+
+        head.shadowColor = new Color(0, 0, 0),
+        head.shadowBlur = 22,
+        head.shadowOffset = new Point(5, 5)
+
+
+		head.strokeColor = new Color(0);
+		head.strokeWidth = 5;
+
+		face.addChild(head);
+	//	head.shadowColor = new Color(1);
+	//	head.shadowBlur = 100;
+	//	head.shadowOffset = new Point(200, 200);
+
+
+		var obo1 = new Path();
+
+		obo1.add(new Point(520, 200));
+		obo1.add(new Point(550, 160));
+		obo1.add(new Point(590, 150));
+
+		obo1.strokeColor = new Color(0);
+		obo1.strokeWidth = 20;
+		obo1.strokeCap = 'round';
+
+		obo1.simplify(100);
+
+
+		var obo2 = new Path();
+
+		obo2.add(new Point(800, 200));
+		obo2.add(new Point(780, 160));
+		obo2.add(new Point(740, 150));
+
+		obo2.strokeColor = new Color(0);
+		obo2.strokeWidth = 20;
+		obo2.strokeCap = 'round';
+
+		obo2.simplify(100);
+
+
+		var obo3 = new Path();
+
+		obo3.add(new Point(800, 180));
+		obo3.add(new Point(750, 150));
+		obo3.add(new Point(740, 130));
+
+		obo3.strokeColor = new Color(0);
+		obo3.strokeWidth = 20;
+		obo3.strokeCap = 'round';
+
+		obo3.simplify(100)
+
+		var obo4 = new Path();
+
+		obo4.add(new Point(520, 180));
+		obo4.add(new Point(570, 150));
+		obo4.add(new Point(580, 130));
+
+		obo4.strokeColor = new Color(0);
+		obo4.strokeWidth = 20;
+		obo4.strokeCap = 'round';
+
+		obo4.simplify(100);
+
+		var myPath = new Path();
+		myPath.strokeColor = 'black';
+		myPath.add(new Point(180, 430));
+		myPath.add(new Point(300, 330));
+		myPath.add(new Point(430, 430));
+
+		myPath.closed = true
+		myPath.fillColor = 'black';
+
+		myPath.simplify(60)
+
+		myPath.strokeColor = new Color(0);
+		myPath.strokeWidth = 30;
+		myPath.strokeCap = 'round';
+
+		if (AXIS_Y > 0.7) {
+			myPath.segments[1].point.y = AXIS_Y * 500;
+		}
+
+		var oko1 = new Path.Circle({
+			center: [570, 130],
+			radius: 20,
+			fillColor: 'black'
+
+
+
+		});
+
+		var oko2 = new Path.Circle({
+			center: [750, 130],
+			radius: 20,
+			fillColor: 'black'
+
+		});
+
+		face.addChild(myPath);
+		face.position.x = WIDTH / 2;
+		face.position.y = HEIGHT / 2;
+
+		// this function runs every frame
+		view.onFrame = function (event) {
+
+			BACKGROUND.fillColor.hue = AXIS_Y * 360;
+
+			face.position.x = WIDTH / 2 + AXIS_X * 20;
+			face.position.y = HEIGHT / 2 + AXIS_Y * 20
+
+
+			obo4.position.y = AXIS_Y * 200
+			obo3.position.y = AXIS_Y * 200
+
+			oko1.position.y = HEIGHT / 2 - AXIS_Y * 100
+			oko2.position.y = HEIGHT / 2 - AXIS_Y * 100
+
+			oko1.position.y = HEIGHT - AXIS_Y * 10 - 500
+			oko2.position.y = HEIGHT - AXIS_Y * 10 - 500
+
+			myPath.segments[1].point.y = AXIS_Y * 500;
+
+			// console.log(myPath.segments[1].point.y)
+
+			if (myPath.segments[1].point.y < 300) {
+				myPath.segments[1].point.y = 300
+			}
+
+			if (AXIS_Y > 0.7) {
+				obo1.visible = true
+				obo2.visible = true
+
+			}
+			else {
+				obo1.visible = false
+				obo2.visible = false
+			}
+
+			if (AXIS_Y < 0.7) {
+				obo3.visible = true
+				obo4.visible = true
+			}
+			else {
+				obo3.visible = false
+				obo4.visible = false
+			}
+
+			if (AXIS_Y > 1) {
+				AXIS_Y = 1;
+			}
+			else if (AXIS_Y < 0) {
+				AXIS_Y = 0;
+			}
+			else { }
+
+			song2.volume = AXIS_Y;
+
+			song.volume = 1 - AXIS_Y;
+		};
+
+        //    if (AXIS_Y > 0.5) {
+         //    	song.playbackRate = 2.0;
+
+        //    }
+         //   else if (AXIS_Y < 0.5){
+           //     song.playbackRate = 0.5;
+          //  }
+
+			//  song.playbackRate = AXIS_Y * 4;
+
+
+		view.onMouseMove = function (event) {
+			AXIS_X = event.point.x / WIDTH;
+			AXIS_Y = event.point.y / HEIGHT;
+
+			// console.log(AXIS_X, AXIS_Y)
+		};
+
+		// sellega saab leap motioni toe
+		Leap.loop( { background: true }, leapAnimate).connect();
+		function leapAnimate(frame) {
+			if (frame.hands.length > 0 && frame.hands[0].palmNormal) {
+				AXIS_X = (frame.hands[0].palmNormal[0] + 1) / 2;
+				AXIS_Y = (frame.hands[0].palmNormal[2] + 1) / 2;
+
+				// console.log(AXIS_X, AXIS_Y);
+			}
+		}
+	};
+</script>
+</html>

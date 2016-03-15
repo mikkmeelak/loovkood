@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Roteeruv objekt</title>
+	<style>
+		body { background-color: lightgray; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: verdana;
+			font-size: 1.5vh;
+			line-height: 1.5;
+			color: white;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Jakob Tulve</p>
+		<p class="desc">Tulnuklik objekt aina veereb ja veereb</p>
+	</div>
+
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+		var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+		BACKGROUND.fillColor = new Color("black");
+
+		var LAINED = [0];
+		var COUNT = 100;
+
+		for (var i = 0; i < COUNT; i++) {
+			LAINED[i] = new Path.Ellipse({
+				center: [WIDTH/3, HEIGHT/2],
+				size: [150, 80],
+
+				fillColor: 'GhostWhite',
+				shadowColor: new Color(0, 1, 0, 0.2),
+				shadowBlur: 30,
+				shadowOffset: new Point(10, 10)
+			});
+
+			LAINED[i].insert(10, HEIGHT/2, WIDTH/3 );
+			LAINED[i].smooth();
+		}
+
+		view.onFrame = function(event) {
+			for (var i = 0; i < LAINED.length; i++) {
+				LAINED[i].position.x += Math.sin(event.time) / 15 - 3;
+				LAINED[i].position.y = i * 3 + 200;
+				LAINED[i].rotate(-2);
+
+				if (LAINED[i].position.x < -150){
+					LAINED[i].position.x = WIDTH + 150;
+				}
+			}
+		}
+
+	};
+</script>
+</html>

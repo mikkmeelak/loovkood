@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>wicked game</title>
+	<style>
+		/*
+        Linda Vainomäe
+        EKA BGD2 2016 LOOVKOOD
+        Chris Isaak- Wicked Game
+
+here you can change the background */
+		body { background-color: ghostwhite;  }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Linda</p>
+		<p class="desc">Chris Isaak - Wicked Game</p>
+	</div>
+
+	<canvas id="canvas" resize></canvas>
+
+	<!--this is how you load your photos-->
+
+    <img id="image" src="https://dl.dropboxusercontent.com/u/7657243/loovkood/palmmm.png" crossorigin="anonymous">
+    <img id="image2" src="https://dl.dropboxusercontent.com/u/7657243/loovkood/cloud_PNG16.png" crossorigin="anonymous">
+    <div style="text-align:right;color:black">
+
+    </div>
+</body>
+<br>
+<br>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+
+		// YOUR CODE STARTS HERE
+
+		// measure screen size and save it
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+
+		// make a new raster
+		var raster = new Raster('image');
+        var raster2 = new Raster('image2');
+
+
+		// this hides
+
+
+		raster.visible = false;
+        raster.size = [ 1000, 1000 ];
+raster.position = view.center;
+
+       raster2.visible = true;
+        raster2.size = [ 500, 500 ];
+
+
+		var LINES = [];
+		var INDEX = 0;
+        var LINES2 = [];
+		var INDEX2 = 0;
+
+
+
+		// loop all rows and columns
+
+
+
+        for (var y = 2; y < raster.height; y = y + 1000) {
+			for (var x = 0; x < raster.width; x = x + 2) {
+				LINES[INDEX] = raster.getSubRaster(x, y, 50, 500);
+
+				LINES[INDEX].position.x = x + 200;
+				LINES[INDEX].position.y = y + 100;
+				//LINES[INDEX].rotation = 50;
+
+				 //LINES[INDEX].scale(y/2, 1);
+
+				LINES[INDEX].blendMode = 'normal';
+				LINES[INDEX].opacity = 0.2;
+
+				INDEX++;
+			}
+		}
+
+
+
+
+
+
+
+		// takes everything and centers it
+
+project.activeLayer.position = view.center;
+
+        view.onFrame = function(event) {
+			for (var i = 0; i < LINES.length; i++) {
+				LINES[i].pivot = [ -LINES[i].height / 2, 10 ];
+				LINES[i].rotation = Math.sin(event.time + i * 200)*10;
+			}
+
+		};
+	};
+</script>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+ <title>vaba aega pole</title>
+ <style>
+   here you can change the background
+  body { background-color: ghostWhite; }
+  canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; cursor: none; }
+  img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Martis Roosimaa</p>
+		<p class="desc">Vaba aja planeerimine. Kui saad mingid asjad korda siis alati tuleb midagi uut peale.
+        </p>
+	</div>
+ <canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript" src='http://js.leapmotion.com/leap-0.6.4.js'></script>
+<script type="text/javascript">
+paper.install(window);
+
+window.onload = function() {
+ paper.setup('canvas');
+
+ view.viewSize = [ window.innerWidth, window.innerHeight ];
+ window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+
+ var tool = new Tool();
+
+ // measure screen size and save it
+ var WIDTH = view.size.width;
+ var HEIGHT = view.size.height;
+
+ var MOUSE_X = WIDTH / 2;
+ var MOUSE_Y = HEIGHT / 2;
+
+ // create a new box just for feedback that everything works
+//  var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+
+ // create a new box just for feedback that everything works
+ var ROUND = new Path.Circle(WIDTH / 2, HEIGHT / 2, 50);
+//  ROUND.fillColor = new Color({ hue: 40, saturation: 1, brightness: 1 });
+ ROUND.strokeColor = new Color(1);
+ ROUND.strokeWidth = 3;
+
+
+// var TEXT = new PointText(new Point(WIDTH / 2, HEIGHT / 2));
+// TEXT.fillColor = 'black';
+//  TEXT.content = 'VABA AEG';
+// TEXT.fontSize = 18;
+
+ var BOXES = [];
+ var COUNT = 300;
+
+//  for(i=0; i < COUNT; i++){
+//   BOXES[i] = new Path.Rectangle(Math.random()*WIDTH-75, Math.random()*HEIGHT-15, 150, 2);
+//   BOXES[i].strokeColor = new Color(0);
+//   BOXES[i].strokeWidth = 3;
+//  BOXES[i].applyMatrix = false;
+//   BOXES[i].rotation = Math.random()*360;
+//  }
+
+ for(i=0; i < COUNT; i++){
+  BOXES[i] = new Path();
+
+  var x = Math.random() * WIDTH
+  var y = Math.random() * HEIGHT
+
+  BOXES[i].add(x + Math.random() * 120, y + Math.random() * 120)
+  BOXES[i].add(x + Math.random() * 120, y + Math.random() * 120)
+  BOXES[i].add(x + Math.random() * 120, y + Math.random() * 120)
+
+  BOXES[i].strokeColor = new Color(0);
+  BOXES[i].strokeWidth = 3;
+  BOXES[i].applyMatrix = false;
+  BOXES[i].rotation = Math.random()*360;
+ }
+
+ var distanceX, distanceY, distance, angle;
+ var minDistance = 150;
+
+ // this function runs every frame
+ view.onFrame = function(event){
+  ROUND.position.x = MOUSE_X;
+  ROUND.position.y = MOUSE_Y;
+  //TEXT.position.x = MOUSE_X;
+  //TEXT.position.y = MOUSE_Y;
+
+  for(i=0; i<BOXES.length; i++){
+   distanceX = ROUND.position.x - BOXES[i].position.x;
+   distanceY = ROUND.position.y - BOXES[i].position.y;
+   distance = Math.sqrt(distanceX*distanceX + distanceY*distanceY);
+ if(distance < minDistance){
+    angle=Math.atan2(-distanceY, -distanceX);
+    BOXES[i].position.x = Math.max(75, Math.min(ROUND.position.x+minDistance*Math.cos(angle), WIDTH-75));
+    BOXES[i].position.y = Math.max(75, Math.min(ROUND.position.y+minDistance*Math.sin(angle), HEIGHT-75));
+    BOXES[i].rotation = (BOXES[i].rotation * 2 + ((360*angle) / (2*Math.PI) + 90)) / 3;
+ for(j=0; j<BOXES.length; j++){
+  distanceX = BOXES[i].position.x - BOXES[j].position.x;
+  distanceY = BOXES[i].position.y - BOXES[j].position.y;
+  distance = Math.sqrt(distanceX*distanceX + distanceY*distanceY);
+  if(i != j && distance < 1){
+   BOXES[j].position.x = Math.random()*WIDTH;
+   BOXES[j].position.y = Math.random()*HEIGHT;
+  }
+ }
+   }
+  }
+ };
+
+//  tool.onMouseUp = function(event) {
+//   ROUND.fillColor.hue = Math.random()*360;
+//  };
+
+ tool.onMouseMove = function(event) {
+  MOUSE_X = event.point.x;
+  MOUSE_Y = event.point.y;
+ };
+
+ // sellega saab leap motioni toe
+	Leap.loop( { background: true }, leapAnimate).connect();
+	function leapAnimate(frame) {
+		if (frame.hands.length > 0 && frame.hands[0].palmNormal) {
+			MOUSE_X = (frame.hands[0].palmNormal[0] + 1) / 2 * WIDTH;
+			MOUSE_Y = (frame.hands[0].palmNormal[2] + 1) / 2 * HEIGHT;
+
+			// console.log(AXIS_X, AXIS_Y);
+		}
+	}
+};
+</script>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>LENNUK</title>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+	<script type="text/javascript" src='http://js.leapmotion.com/leap-0.6.4.js'></script>
+
+	<style>
+		/* here you can change the background */
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+        body { background-color: midnightblue; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author" style="color:white";>Kristjan Kesküla</p>
+		<p class="desc" style="color:white";>Google Mapsi glitch-lennukist inspireeritud</p>
+	</div>
+	<canvas id="myCanvas" resize></canvas>
+</body>
+<script type="text/paperscript" canvas="myCanvas">
+	paper.install(window)
+
+	view.viewSize = [ window.innerWidth, window.innerHeight ];
+	window.onresize = function(event) {
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+	}
+
+
+	var WIDTH = view.size.width;
+	var HEIGHT = view.size.height;
+
+	var AXIS_X = 0;
+	var AXIS_Y = 0;
+	var KIHT1 = new Layer()
+
+tool.maxDistance = 3;
+
+var mousePoint = view.center;
+var amount = 3;
+var colors = ['red', 'lime', 'blue'];
+
+var mouseEvent = view.center
+
+for (var i = 0; i < amount; i++) {
+
+// Teen lennuki
+    var pathData = 'M25.789,24.854h0.239L43.8,30.71c0,0,1.299-3.445-0.414-4.601c-1.713-1.153-5.233-3.524-5.233-3.524\
+		l-5.23-3.521l-6.895-4.643h-0.07l-0.393-10.91c0,0,0.089-3.511-2.497-3.511c-2.588,0-2.87,3.08-2.87,3.08l-0.521,11.791\
+		l-6.017,4.202l-5.24,3.666c0,0-3.024,1.729-4.825,3.368c-1.801,1.644-0.415,5.19-0.415,5.19l16.662-6.18l1.48,15.146\
+		c0,0.356,0.012,0.7,0.045,1.024L15.95,44.99c0,0-1.418,1.952,0,1.952c1.416,0,12.69,0,13.828,0c1.136,0,0.008-1.78,0.008-1.78\
+		l-5.951-3.901c0.034-0.19,0.054-0.386,0.054-0.585L25.789,24.854z';
+    var lennuk = new Path(pathData)
+    lennuk.fillColor = colors[i % 4];
+    lennuk.blendMode= 'lighten';
+    lennuk.applyMatrix=false;
+	var path = new Path.Rectangle(lennuk);
+	path.fillColor = colors[i % 4];
+	var scale = (1 - i / 10) * 5;
+}
+var test = new Point(0,0);
+function onMouseMove(event) {
+    mouseEvent = event
+	mousePoint = event.point;
+	test = event.point;
+
+
+}
+
+var children = project.activeLayer.children;
+function onFrame(event) {
+	for (var i = 0, l = children.length; i < l; i++) {
+		var item = children[i];
+		var delta = (test - item.position) / (i + 10);
+		if (delta.length > 0.9)
+
+			if(mouseEvent.delta)
+		        item.rotation = mouseEvent.delta.angle + 90;
+			item.position += delta;
+			item.applyMatrix = false;
+	}
+
+}
+
+// sellega saab leap motioni toe
+Leap.loop( { background: true }, leapAnimate).connect();
+function leapAnimate(frame) {
+	if (frame.hands.length > 0 && frame.hands[0].palmNormal) {
+		AXIS_X = (frame.hands[0].palmNormal[0] + 1) / 2;
+		AXIS_Y = (frame.hands[0].palmNormal[2] + 1) / 2;
+
+		// console.log(AXIS_X, AXIS_Y);
+	}
+}
+</script>
+</html>

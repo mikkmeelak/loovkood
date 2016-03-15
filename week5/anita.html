@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LOOVKOOD</title>
+	<style>
+		/* here you can change the background */
+		body { background-color: lightgray; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Anita Kossareva</p>
+		<p class="desc">Sphere that makes sounds</p>
+	</div>
+	<canvas id="canvas" resize></canvas>
+	<img id="image" src="http://assets.paperjs.org/images/marilyn.jpg" crossorigin="anonymous">
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript" src='http://js.leapmotion.com/leap-0.6.4.js'></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+
+		// YOUR CODE STARTS HERE
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+		var AXIS_X = 0;
+		var AXIS_Y = 0;
+
+		var context = new (window.AudioContext || window.webkitAudioContext)();
+
+		// create first oscillator. "type" defines how it sounds.
+		var oscillator = context.createOscillator();
+		oscillator.connect(context.destination);
+		oscillator.type = 'trinagle';			// type of oscillator, try sine, square or triangle
+		oscillator.frequency.value = 0; 	// value in hertz
+		oscillator.start(0);
+
+		// create a new box just for feedback that everything works
+		var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+
+		BACKGROUND.fillColor = new Color({
+			hue: 360,
+			saturation: 0.3,
+			brightness: 1
+		});
+
+		var frameDelta = 1000;
+
+		var circle = new Path.Circle({
+			radius: 120,
+			center: new Point(100, 100)
+		});
+
+		circle.fillColor = {
+			gradient: {
+				stops: [['LightPink'], ['Cyan']],
+				radial: true
+			},
+			origin: circle.position,
+			destination: circle.bounds.rightCenter
+		};
+
+		circle.opacity = 0.5;
+
+		// this function runs every frame
+		view.onFrame = function (event) {
+			BACKGROUND.fillColor.hue = AXIS_X * 360;
+			BACKGROUND.fillColor.brightness = AXIS_Y * 1;
+
+			// lihtsustasin palli liikumist
+			circle.position.x = AXIS_X * WIDTH;
+			circle.position.y = AXIS_Y * HEIGHT;
+
+			// kui pall on vastu vasakut või paremat äärt
+			if (AXIS_X <= 0 || AXIS_X >= 1.0) {
+				oscillator.type = 'square';
+				oscillator.frequency.value = 500;
+			}
+			// kui pall on vastu ülemist või alumist äärt
+			else if (AXIS_Y <= 0 || AXIS_Y >= 1.0) {
+				oscillator.type = 'square';
+				oscillator.frequency.value = 100;
+			}
+			// või kui on kuskil keskel
+			else {
+				oscillator.frequency.value = 1;
+			}
+		};
+
+		tool.onMouseMove = function(event) {
+			AXIS_X = event.point.x / WIDTH;
+			AXIS_Y = event.point.y / HEIGHT;
+		}
+
+		// sellega saab leap motioni toe
+		Leap.loop( { background: true }, leapAnimate).connect();
+		function leapAnimate(frame) {
+			if (frame.hands.length > 0 && frame.hands[0].palmNormal) {
+				AXIS_X = (frame.hands[0].palmNormal[0] + 1) / 2;
+				AXIS_Y = (frame.hands[0].palmNormal[2] + 1) / 2;
+
+				// console.log(AXIS_X, AXIS_Y);
+			}
+		}
+	};
+</script>
+</html>

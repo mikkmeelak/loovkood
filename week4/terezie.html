@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
 	<title>LOOVKOOD</title>
@@ -7,10 +7,28 @@
 		body { background-color: blue; }
 		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
 		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
 	</style>
 </head>
 
 <body>
+	<div class="caption">
+		<p class="Terezie Stindlova">name</p>
+		<p class="M.I.A.–Borders">about the sketch</p>
+	</div>
+
 	<canvas id="canvas" resize></canvas>
 
 	<!--this is how you load your photos-->
@@ -41,24 +59,25 @@
 		raster.visible = false;
 
 		// resize to limit the count of the pixels
-		raster.size = [ 240, 240 ];
+		//raster.position = view.centred
+        raster.size = [ 300, 340 ];
 
 		var LINES = [];
 		var INDEX = 0;
 
 		// loop all rows and columns
-		for (var y = 0; y < raster.height; y = y + 40) {
-			for (var x = 0; x < raster.width; x = x + 60) {
-				LINES[INDEX] = raster.getSubRaster(x, y, raster.width, 100);
+		for (var y = 0; y < raster.height; y = y + 10) {
+			for (var x = 0; x < raster.width; x = x + 70) {
+				LINES[INDEX] = raster.getSubRaster(x, y, raster.width, 70);
 
-				LINES[INDEX].position.x = x * 2;
-				LINES[INDEX].position.y = y * 2;
+				LINES[INDEX].position.x = x * 5;
+				LINES[INDEX].position.y = y * 5;
 				LINES[INDEX].rotation = x;
 
 				// LINES[INDEX].scale(y/100, 1);
 
 				LINES[INDEX].blendMode = 'overlay';
-				LINES[INDEX].opacity = 1.5;
+				LINES[INDEX].opacity = 1.7;
 
 				INDEX++;
 
@@ -105,7 +124,7 @@
 		 view.onFrame = function(event) {
 		 	for (var i = 0; i < LINES.length; i++) {
 		 		LINES[i].pivot = [ -LINES[i].width / 8, 0 ];
-		 		LINES[i].rotation = Math.tan(event.time + i * 90) * 100;
+		 		LINES[i].rotation = Math.tan(event.time + i * 120) * 100;
 		 	}
 		 };
 	};

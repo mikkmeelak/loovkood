@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>LOOVKOOD</title>
+	<style>
+		body { background-color: lightgray; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+            color: tomato;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author"><B>JORVEN VIILIK<B></p>
+		<p class="desc">SCREENSAVER - STATISTIK</p>
+	</div>
+
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+		// Jorven Viilik
+		// EKA BGD2 2016 loovkood
+		// SCREENSAVER - "Raamatupidaja Matrix"
+
+		// measure screen size and save for later
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+		// for background we draw a rectangle from top left corner
+		// and set its width and height the same as screens
+		var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+		BACKGROUND.fillColor = new Color( ' #e2e2e2');
+
+		// DOTS is an array for all our dots. helps us to find them later
+		var DOTS = [];
+		var INDEX = 0;
+
+		// this sets the spacing between dots
+		var STEP = 0.5;
+
+		// hello, this is for loop. it's going to be one of your best friends
+		// in coding. it works like this
+		// first we set an value we start our loop. here we have var x = STEP;
+		// then we say for how long we want this for-loop to loop
+		// read it as 'let's loop until this statement (x < WIDTH) is true'
+		// on every loop add something to previus value
+		// here we add STEP to x until our screen width allows
+		for (var x = STEP; x < WIDTH - STEP; x = x + STEP) {
+			// for every loop lets draw a circle with diameter of 3px
+			// HEIGHT / 2 means that we'll draw it into
+			// the middle of the screen
+
+		/*  DOTS[INDEX] = new Path.Circle(x, HEIGHT / 2, 6);
+			DOTS[INDEX].fillColor = '#ff4d4d';
+		*/
+			// to see how an array DOTS works let's write INDEX number instead
+			DOTS[INDEX] = new PointText(x, HEIGHT *79);
+			DOTS[INDEX].fillColor = 'black';
+			DOTS[INDEX].justification = 'center';
+			DOTS[INDEX].content = INDEX;
+
+			// on every loop add one to INDEX
+			// it's shorthand for INDEX = INDEX + 1;
+			INDEX++;
+		}
+
+		// do something on every frame. probably your monitor is 60 frames per second
+		view.onFrame = function(event) {
+			// we are using the DOTS array we defined and filles with DOTs before
+			// let's loop it
+			for (var i = 0; i < DOTS.length; i = i + 2) {
+				// DOTS[] means get be a DOT from DOTS array from the position i
+				// remember that array's count starts from 0
+				// so DOTS[0] gets you the first dot from the array
+				DOTS[i].position.y = HEIGHT/2 + Math.tan(event.time/50 * i + 2) * 90;
+			}
+		};
+
+		// get seventh dot from DOTS and paint it green
+		// DOTS[6].fillColor = 'green';
+
+		// draw a line to the center of the screen
+		// var CENTERLINE = new Path.Line(0, HEIGHT/2, WIDTH, HEIGHT/2);
+		// CENTERLINE.strokeColor = 'gray';
+
+	};
+</script>
+</html>

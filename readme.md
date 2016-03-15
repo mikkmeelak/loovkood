@@ -24,6 +24,7 @@ Loo abstraktne karakter ja anna sellele parameetriteks kaks omadust.
 | Anita	 	| ok	| ok	| ok	| ok	|
 | Arvi	 	| nop	| ok	| ok	| ok	|
 | Hayley	| nop	| ok	| ok	| nop	|
+| Jakob		| nop	| nop	| nop	| nop	|
 | Johann	| nop	| ok	| silmad on õigesti? | ok	|
 | Jorven	| ok	| nop	| ok	| ok	|
 | Kristjan	| nop	| nop	| nop	| nop	|

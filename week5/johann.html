@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>LOOVKOOD</title>
+	<style>
+		/* here you can change the background */
+		body { background-color: black; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+			color: white;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+			
+
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">johann kabonen</p>
+		<p class="desc">"kinnipeetav kuuleb kongiaknast mööduvaid sireene" muuta saab trellide tihedust ja sireenide kõla</p>
+	</div>
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+	<img id="image" src="http://assets.paperjs.org/images/marilyn.jpg" crossorigin="anonymous">
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript" src='http://js.leapmotion.com/leap-0.6.4.js'></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+
+		// YOUR CODE STARTS HERE
+
+		// measure screen size and save it
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+		var AXIS_X = 20;
+		var AXIS_Y = 100;
+
+
+
+		// create a new box just for feedback that everything works
+		// var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+		// BACKGROUND.fillColor = new Color({
+		// 	hue: 360,
+		// 	saturation: 1,
+		// 	brightness: 1
+		// });
+
+		// create a new box just for feedback that everything works
+		var BOX = new Path.Rectangle(WIDTH / 20 - 180, HEIGHT / 2 - 180, 900, 900);
+		BOX.fillColor = new Color({
+			hue: 360,
+			saturation: 10,
+			brightness: 10
+		});
+
+		BOX.strokeColor = new Color(10);
+		BOX.strokeWidth = 300;
+
+		// create web audio api context
+		var context = new (window.AudioContext || window.webkitAudioContext)();
+
+				// create first oscillator. "type" defines how it sounds.
+		var oscillator = context.createOscillator();
+		oscillator.connect(context.destination);
+		oscillator.type = 'square';			// type of oscillator, try sine, square or triangle
+		oscillator.frequency.value = 10; 	// value in hertz
+		oscillator.start(0);
+
+
+
+
+
+		// view.onFrame = function(event) {
+
+		// 	// control the sound via frequency and detune
+		// 	oscillator.frequency.value = AXIS_X * 100 + 300;
+		// 	oscillator.detune.value = AXIS_Y * 100 + 100;
+
+
+		// };
+
+		view.onMouseMove = function(event) {
+			AXIS_X = event.point.x / WIDTH;
+			AXIS_Y = event.point.y / HEIGHT;
+		};
+
+
+		// this function runs every frame
+		view.onFrame = function(event) {
+
+			// control the sound via frequency and detune
+			oscillator.frequency.value = AXIS_X * 100 + 300;
+			oscillator.detune.value = AXIS_Y * 100 + 100;
+			 //BOX.rotate(6);	// spin the box
+
+			BOX.fillColor.hue = AXIS_X * 360;
+			// BACKGROUND.fillColor.hue = AXIS_Y * 360;
+
+			BOX.strokeWidth = AXIS_Y * 980;
+			BOX.dashArray = [ AXIS_X * 60, AXIS_Y * 360/2];
+
+
+
+
+			for (var i = 0; i < BOX.segments.length; i++) {
+				if (i % 100 == 10) {
+					BOX.segments[i].point.x = AXIS_Y * WIDTH - WIDTH / 20 ;
+				}
+				else {
+					BOX.segments[i].point.y = AXIS_X * WIDTH;
+				}
+
+			}
+
+
+
+
+			// takes everything and centers it
+			project.activeLayer.position = view.center;
+		};
+
+		view.onMouseMove = function(event) {
+			AXIS_X = event.point.x / WIDTH;
+			AXIS_Y = event.point.y / HEIGHT;
+		};
+
+		// sellega saab leap motioni toe
+		Leap.loop( { background: true }, leapAnimate).connect();
+		function leapAnimate(frame) {
+			if (frame.hands.length > 0 && frame.hands[0].palmNormal) {
+				AXIS_X = (frame.hands[0].palmNormal[0] + 1) / 2;
+				AXIS_Y = (frame.hands[0].palmNormal[2] + 1) / 2;
+
+				// console.log(AXIS_X, AXIS_Y);
+			}
+		}
+	};
+</script>
+</html>

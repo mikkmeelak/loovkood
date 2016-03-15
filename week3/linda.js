@@ -1,6 +1,9 @@
-
 //Linda Vainomäe loovkood
 //EKA BGD2 2016 joon
+//pilvede joonistamise abivahend
+
+document.title = 'Linda';
+
 var WIDTH = view.size.width;
 var HEIGHT = view.size.height;
 console.log(WIDTH + ' ja '+ HEIGHT)
@@ -10,39 +13,16 @@ BACKGROUND.fillColor = 'beige';
 
 tool.minDistance = 30;
 
-var JOON; 
+var JOON;
 
 function onMouseDown(event) {
-  
-    
-    //start drawing new path
     JOON = new Path({
-    fillColor: 'white',
-    /*fillColor:  {
-        hue: Math.random() * 360,
-        saturation: 1,
-        brightness: 1
-        
-        
-    },*/
- 
-    shadowColor: 'blue',
-    shadowBlur: 50,
-    shadowOffset: new Point(20, 10)
-});
+		fillColor: 'white',
+		shadowColor: 'blue',
+		shadowBlur: 50,
+		shadowOffset: new Point(20, 10)
+	});
     JOON.strokeColor = 'blue';
-   /* JOON.strokeColor = new Color {(
-        hue: Math.random () * 360, 
-        saturation: 1, 
-        brightness: 1, 
-        )
-        */
-    
-    /*JOON.strokeWidth = 3;
-    JOON.dashArray = [4, 10];*/
-    
-   
-    
 }
 
 function onMouseDrag(event) {

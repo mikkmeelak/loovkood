@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>blob</title>
+	<style>
+		/* here you can change the background */
+		body { background-color: black; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+            color: black;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Hayley Duckett</p>
+		<p class="desc">Eyeballz</p>
+	</div>
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+	<img id="image" src="http://assets.paperjs.org/images/marilyn.jpg" crossorigin="anonymous">
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript" src='http://js.leapmotion.com/leap-0.6.4.js'></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+
+
+
+		// YOUR CODE STARTS HERE
+
+        // measure screen size and save it
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+        var AXIS_X = 0;
+		var AXIS_Y = 0;
+
+        //create a new box just for feedback that everything works
+		var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+		BACKGROUND.fillColor = new Color({
+		  hue: 360,
+		  saturation: 1,
+		  brightness: 1
+		  });
+
+
+
+
+        var head = new Group();
+
+        var alllefteye = new Group();
+
+        var allrighteye = new Group();
+
+
+		var face = new Path.Circle(new Point(WIDTH / 2, HEIGHT / 2), 100);
+        face.fillColor = 'black';
+        face.fillColor = 'black'
+        face.strokeColor = 'black'
+
+
+
+
+
+
+        face.simplify(10);
+
+
+        head.addChild(face);
+
+
+        var leftEye = new Path.Circle(new Point(WIDTH / 2 - 70, HEIGHT / 2 - 40), 20);
+        leftEye.fillColor = 'white'
+        leftEye.fillColor = 'white'
+        leftEye.strokeColor = 'white'
+
+        var rightEye = new Path.Circle(new Point(WIDTH / 2 + 30, HEIGHT / 2 - 40), 20);
+        rightEye.fillColor = 'white'
+        rightEye.fillColor = 'white'
+        rightEye.strokeColor = 'white'
+
+        var leftPupil = new Path.Circle(new Point(WIDTH / 2 - 70, HEIGHT / 2 - 70), 5);
+        leftPupil.fillColor = 'black'
+        leftPupil.fillColor = 'black'
+        leftPupil.strokeColor = 'black'
+
+        var rightPupil = new Path.Circle(new Point(WIDTH / 2 + 30, HEIGHT / 2 - 70), 5);
+        rightPupil.fillColor = 'black'
+        rightPupil.fillColor = 'black'
+        rightPupil.strokeColor = 'black'
+
+        var nose = new Path.Rectangle(new Point(WIDTH / 2 - 30, HEIGHT / 2 - 10), 10);
+        nose.fillColor = 'white'
+        nose.fillColor = 'white'
+        nose.strokeColor = 'white'
+
+        //var mouth = new Path.Circle(new Point(WIDTH / 2 - 30, HEIGHT / 2 - 70), 10);
+        // mouth.fillColor = 'white'
+
+
+
+         head.addChild(leftEye);
+         head.addChild(rightEye);
+         head.addChild(leftPupil);
+         head.addChild(rightPupil);
+         head.addChild(nose);
+
+
+
+
+         //allrighteye.addChild(rightEye);
+         //allrighteye.addChild(rightPupil);
+
+        // alllefteye.addChild(leftEye);
+        // alllefteye.addChild(leftPupil);
+
+
+        // view.onMouseMove = function (event) {
+        //    console.log(event.point.x)
+	    // //    face.position = event.point;
+
+        // //    leftEye.position.x = event.point.x + 15;
+        // //    leftEye.position.y = event.point.y;
+
+
+        // //    rightEye.position.x = event.point.x + 45;
+        // //    rightEye.position.y = event.point.y;
+        // }
+
+
+
+
+        view.onFrame = function(event) {
+
+            head.rotate(5);
+
+            //alllefteye.rotate(4);
+
+
+            //head.position.y = AXIS_Y * WIDTH;
+            //head.position.x = AXIS_X * WIDTH;
+
+
+
+            leftEye.position.y = AXIS_Y * HEIGHT - 80;
+            leftEye.position.x = AXIS_X * WIDTH + 80;
+            leftEye.strokeWidth = AXIS_Y * 75;
+
+
+
+            rightEye.position.y = AXIS_Y * HEIGHT - 80;
+            rightEye.position.x = AXIS_X * WIDTH - 10;
+            rightEye.strokeWidth = AXIS_Y * 75;
+
+
+            leftPupil.position.y = AXIS_Y * HEIGHT - 70;
+            leftPupil.position.x = AXIS_X * WIDTH + 80;
+            leftPupil.strokeWidth = AXIS_X * 20;
+
+
+            rightPupil.position.y = AXIS_Y * HEIGHT - 70;
+            rightPupil.position.x = AXIS_X * WIDTH - 10;
+            rightPupil.strokeWidth = AXIS_X * 20;
+
+            face.position.y = AXIS_Y * HEIGHT + 10;
+            face.position.x = AXIS_X * WIDTH;
+            face.strokeWidth = AXIS_X * 250;
+            //face.strokeWidth = AXIS_Y / 4;
+
+            nose.position.y = AXIS_Y * HEIGHT + 20;
+            nose.position.x = AXIS_X * WIDTH + 20;
+           // nose.strokeWidth = AXIS_X * 20;
+
+
+
+            BACKGROUND.fillColor.saturation = AXIS_Y * 0.7;
+
+            //BACKGROUND.fillColor.lightness = AXIS_X * 0.9;
+
+            BACKGROUND.fillColor.hue = AXIS_Y * 40;
+
+            //face.fillColor.hue = AXIS_X * 100;
+            //face.simplify(AXIS_Y * 10);
+		};
+
+        view.onMouseMove = function(event) {
+            AXIS_X = event.point.x / WIDTH;
+            AXIS_Y = event.point.y / HEIGHT;
+		};
+
+		// sellega saab leap motioni toe
+		Leap.loop( { background: true }, leapAnimate).connect();
+		function leapAnimate(frame) {
+			if (frame.hands.length > 0 && frame.hands[0].palmNormal) {
+				AXIS_X = (frame.hands[0].palmNormal[0] + 1) / 2;
+				AXIS_Y = (frame.hands[0].palmNormal[2] + 1) / 2;
+
+				// console.log(AXIS_X, AXIS_Y);
+			}
+		}
+	};
+</script>
+</html>

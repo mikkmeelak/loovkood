@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>niit ja nõel</title>
+	<style>
+		/* here you can change the background */
+		body { background-color: white; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+        
+        .caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+    <div class="caption">
+		<p class="author" style="color:red";>Linda</p>
+		<p class="desc" style="color:red";>See tunne kui niit ei lähe nõela august läbi</p>
+	</div>
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+	<img id="image" src="http://assets.paperjs.org/images/marilyn.jpg" crossorigin="anonymous">
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/paperscript" canvas="canvas">
+	paper.install(window);
+
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+
+		// YOUR CODE STARTS HERE
+
+		// measure screen size and save it
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+		// create a new box just for feedback that everything works
+		var AXIS_X = 0;
+        var AXIS_Y = 0;
+
+var BACKGROUND = new Path.Rectangle (0, 0, WIDTH, HEIGHT)
+BACKGROUND.fillColor = 'white';
+
+var pathData = 'M347.051,128.615c-19.472-0.935-20.398,60.825-19.472,95.449C328.507,258.686,347.051,560,347.051,560s18.544-301.314,19.472-335.936C367.45,189.44,366.523,127.681,347.051,128.615zM354.514,193.184c0,10.294,0.019,44.041-7.463,44.023c-7.433-0.02-7.418-31.038-7.418-46.94c0-15.904,2.318-46.911,8.19-46.814C355.334,143.577,354.514,182.89,354.514,193.184z';
+var noel = new Path(pathData);
+noel.fillColor = 'black';
+
+var points = 10;
+var length = 80;
+
+//var count = 150;
+
+var path = new Path()
+path.strokeColor = 'red';
+path.strokeWidth = 1;
+path.strokeCap = 'round';
+path.opacity = 0.5;
+path.blendMode = 'normal';
+
+var start = view.center.divide(new Point(500, 500));
+// var start = view.center;
+
+for (var i = 0; i < points; i++) {
+    //path.add(new Point(i * length, 2));
+	path.add(start.add(new Point(i * length, 2)));
+ }
+    
+view.onMouseMove = function(event) {
+	path.firstSegment.point = event.point;
+    
+	for (var i = 0; i < points - 1; i++) {
+		var segment = path.segments[i];
+		var nextSegment = segment.next;
+		var vector = segment.point - nextSegment.point;
+		vector.length = length-2;
+		nextSegment.point = segment.point - vector;
+	}
+    
+	path.smooth({ type: 'continuous' });
+    
+     AXIS_X = event.point.x / WIDTH;
+    AXIS_Y = event.point.y / HEIGHT;
+};
+
+
+view.onMouseDown = function(event) {
+	path.fullySelected = false;
+	path.strokeColor = 'red';
+};
+
+view.onMouseUp = function(event) {
+	path.fullySelected = false;
+	path.strokeColor = 'red';
+};
+
+view.onFrame = function (event) {
+    for (var i = 0; i < noel.segments.length / 2; i++) {
+
+        if (i % 2 == 0) {
+            noel.segments[i].point.x = AXIS_X * WIDTH / 2;
+        }
+        else {
+            noel.segments[i].point.y = AXIS_Y * WIDTH / 2;
+        }
+    };
+};
+
+</script>
+</html>

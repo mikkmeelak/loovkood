@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>marmormaker</title>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+	<script type="text/javascript" src='http://js.leapmotion.com/leap-0.6.4.js'></script>
+
+	<style>
+		/* here you can change the background */
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Ulla Väljaste</p>
+		<p class="desc">Vesine mustrigeneraator <br>Kontrollida saab taustavärvi (y-axis) <br>ja taustavärvi küllastusastet (x-axis); <br>värvilaikude kuju (hiirega sikutades).</p>
+	</div>
+
+	<canvas id="myCanvas" resize keepalive="true" hidpi="off"></canvas>
+</body>
+<script type="text/paperscript" canvas="myCanvas">
+	paper.install(window)
+
+	view.viewSize = [ window.innerWidth, window.innerHeight ];
+	window.onresize = function(event) {
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+	}
+
+
+	var WIDTH = view.size.width;
+	var HEIGHT = view.size.height;
+
+	var AXIS_X = 0;
+	var AXIS_Y = 0;
+	var KIHT1 = new Layer()
+	// create a new box just for feedback that everything works
+	var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+	BACKGROUND.fillColor = new Color({
+		hue: 360,
+		saturation: 0.45,
+		brightness: 0.8
+	});
+
+
+function onFrame() {
+			BACKGROUND.fillColor.hue = AXIS_Y * 180;
+			BACKGROUND.fillColor.saturation = AXIS_X * 0.5;
+		};
+
+view.onMouseMove = function(event) {
+	AXIS_X = event.point.x / WIDTH;
+	AXIS_Y = event.point.y / HEIGHT;
+};
+
+////////////////////////////////
+
+
+
+var KIHT2 = new Layer();
+
+var values = {
+	paths: 17,
+	minPoints: 5,
+	maxPoints: 12,
+	minRadius: 60,
+	maxRadius: 90
+};
+
+var hitOptions = {
+	segments: true,
+	stroke: true,
+	fill: true,
+	tolerance: 5
+};
+
+createPaths();
+
+function createPaths() {
+	var radiusDelta = values.maxRadius - values.minRadius;
+	var pointsDelta = values.maxPoints - values.minPoints;
+
+	for (var i = 0; i < values.paths; i++) {
+		var radius = values.minRadius + Math.random() * radiusDelta * 6;
+		var points = values.minPoints + Math.floor(Math.random() * pointsDelta);
+		var path = createBlob(view.size * Point.random(), radius, points);
+		var lightness = (Math.random() - 0.5) * 0.6 + 0.6;
+		var hue = Math.random() * 280;
+		path.fillColor = { hue: hue, saturation: 0.9, lightness: lightness };
+
+		path.opacity = 0.4;
+
+
+	};
+}
+
+function createBlob(center, maxRadius, points) {
+	var path = new Path();
+	path.closed = true;
+	for (var i = 0; i < points; i++) {
+		var delta = new Point({
+			length: (maxRadius * 0.5) + (Math.random() * maxRadius * 0.5),
+			angle: (360 / points) * i
+		});
+		path.add(center + delta);
+	}
+	path.smooth();
+	return path;
+}
+var segment, path;
+var movePath = false;
+
+
+function onMouseDrag(event) {
+    for (var i = 0; i < KIHT2.children.length; i++) {
+	    var child = KIHT2.children[i];
+	    var randomPoint = Math.floor((Math.random()*20)%(child.segments.length-1))
+	    child.segments[randomPoint].point += event.delta;
+        child.smooth({type:"continuous"});
+    };
+}
+
+function onKeyDown(event) {
+	if (event.key == 'space') {
+		//selected = !selected;
+		 location.reload();
+	}
+}
+
+	setInterval(function() {
+		location.reload();
+	}, 10000);
+
+	// sellega saab leap motioni toe
+		Leap.loop( { background: true }, leapAnimate).connect();
+		function leapAnimate(frame) {
+			if (frame.hands.length > 0 && frame.hands[0].palmNormal) {
+				AXIS_X = (frame.hands[0].palmNormal[0] + 1) / 2;
+				AXIS_Y = (frame.hands[0].palmNormal[2] + 1) / 2;
+
+				// console.log(AXIS_X, AXIS_Y);
+			}
+		}
+</script>
+	</html>

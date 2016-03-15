@@ -1,3 +1,5 @@
+document.title = 'Anita';
+
 var line;
 
 var startColor = '#37FDFC';
@@ -10,7 +12,7 @@ function onMouseDown(event) {
     startColor = "#"+Math.floor(Math.random()*16777215).toString(16);
 	line = new Path();
 	line.add(event.point);
-    line.strokeColor = 'black';
+    line.strokeColor = 'White';
     startPoint = event.point;
 }
 
@@ -23,7 +25,7 @@ function onMouseDrag(event) {
 
 	line.add(top);
 	line.insert(0, bottom);
-	
+
 	line.smooth();
 }
 
@@ -33,9 +35,9 @@ function onMouseUp(event) {
     line.fillColor = {
 	    gradient: {
 	        stops: [startColor, endColor]
-	        
-	    }, 
-	    origin: startPoint, 
+
+	    },
+	    origin: startPoint,
 	    destination: endPoint
 	};
     line.closed = true;

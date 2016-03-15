@@ -1,0 +1,92 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>LOOVKOOD</title>
+	<style>
+		body { background-color: lightgray; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+            color: white;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Arvi Piir</p>
+		<p class="desc">Screensaver siilile</p>
+	</div>
+
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+		// Arvi Piir
+		// EKA BGD2 2016 loovkood
+
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+		var BACKGROUND = new Path.Rectangle(1, 1, WIDTH, HEIGHT);
+		BACKGROUND.fillColor = new Color (0);
+
+		// for loop
+		var DOTS = [];
+		var INDEX = 8;
+		var STEP = 16;
+
+		// building waves
+		var LAINED = [];
+		var COUNT = 99;
+
+		for (var i = 0; i < COUNT; i++) {
+			LAINED[i] = new Path.Line({
+				from: [0, HEIGHT/1 + Math.cos(i) / 50 * HEIGHT/50],
+				to: [WIDTH, HEIGHT/1 + Math.cos(i+1) *100],
+				strokeColor: {
+				hue: 10 + Math.sin(i) * 333,     		// value 0-360
+					saturation: 99,                   	// value 0-1
+					brightness: 66                    	// value 0-1
+				},
+				strokeWidth: 1,
+			});
+
+			LAINED[i].insert(1, i * 30, HEIGHT/2 + i);
+			LAINED[i].smooth();
+		}
+
+		view.onFrame = function(event) {
+			for (var i = 0; i < LAINED.length; i++) {
+				LAINED[i].position.y += Math.sin(event.time) / 50 * i;
+				LAINED[i].rotate(1);
+			}
+		}
+	};
+</script>
+</html>

@@ -7,14 +7,33 @@
 		body { background-color: lightslategrey; }
 		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
 		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+            color: white;
+
+			z-index: 1000;
+		}
 	</style>
 </head>
 
 <body>
+	<div class="caption">
+		<p class="author">Jorven Viilik</p>
+		<p class="desc">Tame Impala - Currents</p>
+	</div>
+
 	<canvas id="canvas" resize></canvas>
 
 	<!--this is how you load your photos-->
-	<img id="image" src="http://assets.paperjs.org/images/marilyn.jpg" crossorigin="anonymous">
+	<img id="image" src="https://upload.wikimedia.org/wikipedia/en/b/ba/Currents_artwork_(Tame_Impala_album).jpg" crossorigin="anonymous">
 </body>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>

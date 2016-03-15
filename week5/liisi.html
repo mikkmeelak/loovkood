@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>LOOVKOOD</title>
+	<style>
+		/*
+        Liisi Lasn
+        BGD2 2016 LOOVKOOD
+        OPTICS */
+		body { background-color: blue; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+            color: white;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Liisi Lasn</p>
+		<p class="desc">AJALINE KONFLIKT
+        </p>
+	</div>
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript" src='http://js.leapmotion.com/leap-0.6.4.js'></script>
+<script type="text/javascript">
+paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+
+		// YOUR CODE STARTS HERE
+
+		// measure screen size and save it
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+var maxFreq = 6000;
+var maxVol = 1;
+
+var initialFreq = 3000;
+var initialVol = 0.5;
+
+		var AXIS_X = 200;
+		var AXIS_Y = 200;
+
+		var RING= new Path.Circle(new Point(WIDTH / 20, HEIGHT / 2 - 180), 50);
+		RING.fillColor = new Color({
+			hue: 240,
+			saturation: 1,
+			brightness: 1,
+		});
+
+		RING.strokeColor = new Color('white');
+
+		// create web audio api context
+		var context = new (window.AudioContext || window.webkitAudioContext)();
+
+				// create first oscillator. "type" defines how it sounds.
+		var oscillator = context.createOscillator();
+		oscillator.connect(context.destination);
+		oscillator.type = 'sine';			// type of oscillator, try sine, square or triangle
+		oscillator.frequency.value = 1000; 	// value in hertz
+		oscillator.start(100000);
+
+		view.onMouseMove = function(event) {
+			AXIS_X = event.point.x / WIDTH *2;
+			AXIS_Y = event.point.y / HEIGHT * 2;
+		};
+
+
+		// this function runs every frame
+		view.onFrame = function(event) {
+
+			// control the sound via frequency and detune
+			oscillator.frequency.value = AXIS_X * 100 + 500;
+			oscillator.detune.value = AXIS_Y * 100 + 100;
+
+			RING.strokeWidth = AXIS_Y * 1000;
+			RING.dashArray = [ AXIS_X * 40, AXIS_Y * 360/4];
+
+			for (var i = 0; i < RING.segments.length; i++) {
+				if (i % 100 == 10) {
+					RING.segments[i].point.x = AXIS_Y * WIDTH - WIDTH;
+				}
+				else {
+					RING.segments[i].point.y = AXIS_X * WIDTH;
+				}
+
+			}
+
+
+			// takes everything and centers it
+			project.activeLayer.position = view.center;
+		};
+
+		view.onMouseMove = function(event) {
+			AXIS_X = event.point.x / WIDTH;
+			AXIS_Y = event.point.y / HEIGHT;
+		};
+
+		// sellega saab leap motioni toe
+		Leap.loop( { background: true }, leapAnimate).connect();
+		function leapAnimate(frame) {
+			if (frame.hands.length > 0 && frame.hands[0].palmNormal) {
+				AXIS_X = (frame.hands[0].palmNormal[0] + 1) / 2;
+				AXIS_Y = (frame.hands[0].palmNormal[2] + 1) / 2;
+
+				// console.log(AXIS_X, AXIS_Y);
+			}
+		}
+	};
+</script>
+</html>

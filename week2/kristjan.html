@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>LOOVKOOD</title>
+	<style>
+		body { background-color: white; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Kristjan Kesküla</p>
+		<p class="desc">Screensaver "Fotosüntees"</p>
+	</div>
+
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+		// Kristjan KeskÃ¼la, Loovkood
+		// EKA graafiline disain 2016
+		// Screensaver
+
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+
+		// taustavÃ¤rv
+		var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+			BACKGROUND.fillColor = new Color('beige');
+		BACKGROUND.onFrame = function(event){
+			this.fillColor.hue = this.fillColor.hue + 0.5;
+		}
+
+		// luupimiseks
+		var DOTS = [];
+		var INDEX = 0;
+		var STEP = 10;
+
+		for (var x = STEP; x < WIDTH - STEP; x = x + STEP) {
+		console.log(x);
+		INDEX = INDEX + 1;
+		}
+
+		var JOONED = [];
+		var COUNT = 50
+
+		for (var i = 0; i < COUNT; i++) {
+			JOONED[i] = new Path.Line({
+				from: [ 100, HEIGHT / 100 + Math.tan(i) * HEIGHT * 5],
+				to: [ HEIGHT/5 + Math.sin(i) * 10],
+				blendMode: 'xor',
+				fillColor: 'lightgreen',
+			});
+
+		// WIDTH * = Mosaiigi tihedus?
+			JOONED[i].insert(1, WIDTH*1.5, HEIGHT/3 + i);
+			JOONED[i].smooth();
+		}
+
+		view.onFrame = function(event) {
+			for (var i = 0; i < JOONED.length; i++) {
+				JOONED[i].position.y += Math.sin(event.time) / 10 * i;
+				JOONED[i].rotate(1);
+			}
+		}
+
+	};
+</script>
+</html>

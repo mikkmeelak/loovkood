@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>LOOVKOOD</title>
+	<style>
+		body { background-color: lightgray; }
+		canvas { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+		img { display: none; }
+		p { margin: 0; }
+
+		.caption {
+			position: fixed;
+			top: 1vw;
+			left: 1vw;
+
+			font-family: sans-serif;
+			font-size: 1.5vh;
+			line-height: 1.5;
+
+			z-index: 1000;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="caption">
+		<p class="author">Ulla Väljaste</p>
+		<p class="desc">Liaanid (skorbuudi käes vaevlejatele)</p>
+	</div>
+
+	<canvas id="canvas" resize keepalive="true" hidpi="off"></canvas>
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+<script type="text/javascript">
+	paper.install(window);
+
+	window.onload = function() {
+		paper.setup('canvas');
+
+		view.viewSize = [ window.innerWidth, window.innerHeight ];
+		window.onresize = function(event) { view.viewSize = [ window.innerWidth, window.innerHeight ]; }
+		var tool = new Tool();
+
+		var WIDTH = view.size.width;
+		var HEIGHT = view.size.height;
+		console.log(WIDTH + ' ja ' + HEIGHT);
+
+		// taust
+		var BACKGROUND = new Path.Rectangle(0, 0, WIDTH, HEIGHT);
+		BACKGROUND.fillColor = 'MediumAquaMarine';
+
+		BACKGROUND.onFrame = function(event) {
+			this.fillColor.hue = this.fillColor.hue + 0.5;
+		}
+
+		// liaanid
+		var LAINED = [];
+
+		for (var i = 0; i < 120; i++) {
+			LAINED[i] = new Path.Rectangle({
+				from: [0, HEIGHT / 2 + Math.cos(i) / 2 * HEIGHT * 40],
+				to: [WIDTH, HEIGHT / 10 + Math.cos(i) / HEIGHT * 60],
+				strokeColor: {
+					hue: 20 + Math.cos(i) * 360,     //value 0-360
+					saturation: 0.3, //value 0-1
+					brightness: 1 //value 0-1
+				},
+				strokeWidth: 3,
+				fillColor: 'tomato'  //rgb alfa: rgba
+			});
+
+			LAINED[i].onFrame = function(event) {
+				this.fillColor.hue = this.fillColor.hue + 0.5;
+			}
+
+			LAINED[i].insert(1, WIDTH, HEIGHT / 2 + i);
+			LAINED[i].smooth();
+		}
+
+		view.onFrame = function(event) {
+			for (var i = 0; i < LAINED.length; i++) {
+				LAINED[i].position.y += Math.sin(event.time) * i;
+				LAINED[i].position.x += Math.cos(event.time / i) * i * 2;
+			}
+		}
+	};
+</script>
+</html>
