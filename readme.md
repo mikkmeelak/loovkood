@@ -10,3 +10,5 @@ seitsme nädala jooksul valminud katsetused
 + week5 – interaktiivne parametriseeritud iseloomuga karakter (ಠ_ಠ)
 
 Kursust juhendas Mikk Meelak stuudiost Platvorm.
+
+![Ulla Väljaste week4](media/loovkood_ulla_week4.gif)
