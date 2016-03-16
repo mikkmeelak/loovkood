@@ -9,6 +9,6 @@ seitsme nädala jooksul valminud katsetused
 + week4 – homage viimati mängitud loole oma playlistis
 + week5 – interaktiivne parametriseeritud iseloomuga karakter (ಠ_ಠ)
 
-Kursust juhendas Mikk Meelak stuudiost Platvorm.
+Kursust juhendas Mikk Meelak stuudiost [Platvorm](http://platvorm.ee).
 
 ![Ulla Väljaste week4](media/loovkood_ulla_week4.gif)
