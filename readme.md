@@ -12,3 +12,4 @@ seitsme nädala jooksul valminud katsetused
 Kursust juhendas Mikk Meelak stuudiost [Platvorm](http://platvorm.ee).
 
 ![Ulla Väljaste week4](media/loovkood_ulla_week4.gif)
+Ulla Väljaste week4 ülesanne
